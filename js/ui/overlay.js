@@ -447,8 +447,8 @@ var Overlay = Widget.inherit({
         this._initCloseOnOutsideClickHandler();
         this._initTabTerminatorHandler();
 
-        // this._$wrapper = $("<div>").addClass(OVERLAY_WRAPPER_CLASS);
-        // this._$content = $("<div>").addClass(OVERLAY_CONTENT_CLASS);
+        this._$wrapper = $("<div>").addClass(OVERLAY_WRAPPER_CLASS);
+        this._$content = $("<div>").addClass(OVERLAY_CONTENT_CLASS);
 
         // var $element = this.$element();
         // this._$wrapper.addClass($element.attr("class"));
@@ -465,8 +465,8 @@ var Overlay = Widget.inherit({
     },
 
     _initMarkup: function() {
-        this._$wrapper = $("<div>").addClass(OVERLAY_WRAPPER_CLASS);
-        this._$content = $("<div>").addClass(OVERLAY_CONTENT_CLASS);
+        // this._$wrapper = $("<div>").addClass(OVERLAY_WRAPPER_CLASS);
+        // this._$content = $("<div>").addClass(OVERLAY_CONTENT_CLASS);
 
         var $element = this.$element();
 
