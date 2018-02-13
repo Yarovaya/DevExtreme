@@ -802,7 +802,7 @@ var Overlay = Widget.inherit({
         if(visible) {
             this._renderContent();
             this._actions.onShowing();
-
+            this._moveToContainer();
             this._renderGeometry();
 
             domUtils.triggerShownEvent(this._$content);
@@ -1422,15 +1422,10 @@ var Overlay = Widget.inherit({
             case "visible":
                 this._toggleShading(value);
 
-                if(value && !this._isParentHidden()) {
-                    this._moveToContainer();
-                }
-
                 this._renderVisibilityAnimate(value).done((function() {
                     if(!this._animateDeferred) {
                         return;
                     }
-
                     this._animateDeferred.resolveWith(this);
                 }).bind(this));
                 break;
