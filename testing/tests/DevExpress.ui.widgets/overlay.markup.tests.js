@@ -32,6 +32,8 @@ QUnit.testStart(function() {
 
 var OVERLAY_CLASS = "dx-overlay",
     OVERLAY_CONTENT_CLASS = "dx-overlay-content",
+    OVERLAY_WRAPPER_CLASS = "dx-overlay-wrapper",
+    OVERLAY_CONTENT_CLASS = "dx-overlay-content",
     OVERLAY_SHADER_CLASS = "dx-overlay-shader",
 
     DISABLED_STATE_CLASS = "dx-state-disabled",
@@ -84,14 +86,28 @@ QUnit.test("markup when disabled = true", function(assert) {
     assert.ok(!$content.hasClass(DISABLED_STATE_CLASS), "disabled state not present in content element");
 });
 
-QUnit.test("content should be present when widget instance exists", function(assert) {
-    var $element = $("#overlay").dxOverlay(),
-        instance = $element.dxOverlay("instance");
+QUnit.test("visible overlay should have wrapper and content", function(assert) {
+    $("#overlay").dxOverlay({
+        visible: true
+    });
 
-    assert.ok($(toSelector(OVERLAY_CONTENT_CLASS)).length);
-
-    instance._dispose();
-    assert.ok(!$(toSelector(OVERLAY_CONTENT_CLASS)).length);
+    assert.ok($(toSelector(OVERLAY_WRAPPER_CLASS)).length, "Overlay has wrapper");
+    assert.ok($(toSelector(OVERLAY_CONTENT_CLASS)).length, "Overlay has content");
 });
+
+QUnit.test("shading color should be customized by option", function(assert) {
+    var overlay = $("#overlay").dxOverlay({
+            shading: true,
+            shadingColor: "rgb(255, 0, 0)",
+            visible: true
+        }).dxOverlay("instance"),
+        $wrapper = $(overlay.$content().parent());
+
+    assert.ok(/rgb\(255,\s?0,\s?0\)/.test($wrapper.css("background-color")));
+
+    overlay.option("shading", false);
+    assert.ok(!/rgb\(255,\s?0,\s?0\)/.test($wrapper.css("background-color")));
+});
+
 
 

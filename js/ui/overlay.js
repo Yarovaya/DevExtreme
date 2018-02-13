@@ -467,6 +467,11 @@ var Overlay = Widget.inherit({
     _initMarkup: function() {
         this._$content.appendTo(this.$element());
 
+        if(this.option("visible") && !this._isParentHidden()) {
+            this._moveToContainer();
+        }
+        this._toggleShading(this.option("visible"));
+
         this.callBase();
     },
 
@@ -798,7 +803,6 @@ var Overlay = Widget.inherit({
             this._renderContent();
             this._actions.onShowing();
 
-            this._moveToContainer();
             this._renderGeometry();
 
             domUtils.triggerShownEvent(this._$content);
@@ -806,7 +810,6 @@ var Overlay = Widget.inherit({
         } else {
             this._moveFromContainer();
         }
-        this._toggleShading(visible);
 
         this._toggleSubscriptions(visible);
     },
@@ -1417,6 +1420,12 @@ var Overlay = Widget.inherit({
                 this._renderGeometry();
                 break;
             case "visible":
+                this._toggleShading(value);
+
+                if(value && !this._isParentHidden()) {
+                    this._moveToContainer();
+                }
+
                 this._renderVisibilityAnimate(value).done((function() {
                     if(!this._animateDeferred) {
                         return;
