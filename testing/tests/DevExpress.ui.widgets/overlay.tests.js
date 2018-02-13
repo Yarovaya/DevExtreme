@@ -2663,13 +2663,13 @@ QUnit.test("overlay should not be dragged when container size less than overlay 
     assert.equal($overlayContent.position().left, 0, "overlay should not be dragged left of target");
 
     keyboard.keyDown("right");
-    assert.equal($overlayContent.position().left, $container.width() - $overlayContent.outerWidth(), "overlay should not be dragged right of target");
+    assert.equal($overlayContent.position().left, 0, "overlay should not be dragged right of target");
 
     keyboard.keyDown("up");
     assert.equal($overlayContent.position().top, 0, "overlay should not be dragged above the target");
 
     keyboard.keyDown("down");
-    assert.equal($overlayContent.position().top, $container.height() - $overlayContent.outerHeight(), "overlay should not be dragged below than target");
+    assert.equal($overlayContent.position().top, 0, "overlay should not be dragged below than target");
 });
 
 QUnit.test("arrows handling for rtl", function(assert) {

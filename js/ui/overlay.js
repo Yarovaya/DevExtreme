@@ -447,10 +447,29 @@ var Overlay = Widget.inherit({
         this._initCloseOnOutsideClickHandler();
         this._initTabTerminatorHandler();
 
+        // this._$wrapper = $("<div>").addClass(OVERLAY_WRAPPER_CLASS);
+        // this._$content = $("<div>").addClass(OVERLAY_CONTENT_CLASS);
+
+        // var $element = this.$element();
+        // this._$wrapper.addClass($element.attr("class"));
+        // $element.addClass(OVERLAY_CLASS);
+
+        // this._$wrapper.attr("data-bind", "dxControlsDescendantBindings: true");
+
+        // // NOTE: hack to fix B251087
+        // eventsEngine.on(this._$wrapper, "MSPointerDown", noop);
+        // // NOTE: bootstrap integration T342292
+        // eventsEngine.on(this._$wrapper, "focusin", function(e) { e.stopPropagation(); });
+
+        this._toggleViewPortSubscription(true);
+    },
+
+    _initMarkup: function() {
         this._$wrapper = $("<div>").addClass(OVERLAY_WRAPPER_CLASS);
         this._$content = $("<div>").addClass(OVERLAY_CONTENT_CLASS);
 
         var $element = this.$element();
+
         this._$wrapper.addClass($element.attr("class"));
         $element.addClass(OVERLAY_CLASS);
 
@@ -461,7 +480,16 @@ var Overlay = Widget.inherit({
         // NOTE: bootstrap integration T342292
         eventsEngine.on(this._$wrapper, "focusin", function(e) { e.stopPropagation(); });
 
-        this._toggleViewPortSubscription(true);
+        this._$content.appendTo(this.$element());
+        this.callBase();
+        this._renderVisibilityAnimate(this.option("visible"));
+    },
+
+    _render: function() {
+        this.callBase();
+
+        // this._$content.appendTo(this.$element());
+        // this._renderVisibilityAnimate(this.option("visible"));
     },
 
     _initOptions: function(options) {
@@ -927,13 +955,6 @@ var Overlay = Widget.inherit({
         if(!closeHandled && !this._showAnimationProcessing) {
             this.hide();
         }
-    },
-
-    _render: function() {
-        this.callBase();
-
-        this._$content.appendTo(this.$element());
-        this._renderVisibilityAnimate(this.option("visible"));
     },
 
     _renderContent: function() {
