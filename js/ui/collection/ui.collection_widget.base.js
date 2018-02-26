@@ -710,6 +710,7 @@ var CollectionWidget = Widget.inherit({
 
         this.$element().addClass(COLLECTION_CLASS);
     },
+
     _render: function() {
         this.callBase();
         // this.onFocusedItemChanged = this._createActionByOption("onFocusedItemChanged");

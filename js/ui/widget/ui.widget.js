@@ -466,7 +466,7 @@ var Widget = DOMComponent.inherit({
     _render: function() {
         this.callBase();
         //this._renderContent();
-        this._fireContentReadyAction();
+        //this._fireContentReadyAction();
 
         this._renderFocusState();
         this._attachFeedbackEvents();
@@ -490,7 +490,7 @@ var Widget = DOMComponent.inherit({
             that._renderContentImpl();
         });
 
-        //that._fireContentReadyAction();
+        that._fireContentReadyAction();
     },
 
     _renderContentImpl: commonUtils.noop,

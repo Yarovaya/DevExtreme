@@ -217,8 +217,14 @@ var Accordion = CollectionWidget.inherit({
         }, ["title", "icon", "iconSrc"], this.option("integrationOptions.watchMethod"));
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._deferredItems = [];
+
+        this.callBase();
+    },
+
+    _render: function() {
+        //this._deferredItems = [];
 
         this.callBase();
         this._fireContentReadyAction();
