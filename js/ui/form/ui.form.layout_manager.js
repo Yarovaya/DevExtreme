@@ -294,7 +294,7 @@ var LayoutManager = Widget.inherit({
         });
     },
 
-    _render: function() {
+    _initMarkup: function() {
         this._clearEditorInstances();
         this.$element().addClass(FORM_LAYOUT_MANAGER_CLASS);
 

@@ -802,13 +802,14 @@ var Form = Widget.inherit({
 
     _initMarkup: function() {
         this._clearCachedInstances();
-    },
-    _render: function() {
-        //this._clearCachedInstances();
         this._prepareFormData();
-
-        this.callBase();
         this.$element().addClass(FORM_CLASS);
+        this.callBase();
+    },
+
+    _render: function() {
+        this.callBase();
+
         this._attachSyncSubscriptions();
 
         this._cachedScreenFactor = windowUtils.getCurrentScreenFactor(this.option("screenByWidth"));
