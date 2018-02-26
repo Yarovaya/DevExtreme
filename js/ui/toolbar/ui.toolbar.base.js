@@ -100,8 +100,8 @@ var ToolbarBase = CollectionWidget.inherit({
     },
 
     _initMarkup: function() {
-        this.callBase();
         this._renderToolbar();
+        this.callBase();
     },
 
     _render: function() {
