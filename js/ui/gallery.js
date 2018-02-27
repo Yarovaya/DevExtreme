@@ -378,6 +378,8 @@ var Gallery = CollectionWidget.inherit({
         this.$element().toggleClass(GALLERY_LOOP_CLASS, this.option("loop"));
         this._renderWrapper();
         this._renderItemsContainer();
+        this._renderNavButtons();
+        this._renderIndicator();
 
         this.callBase();
     },
@@ -390,8 +392,6 @@ var Gallery = CollectionWidget.inherit({
         this._renderItemSizes();
         this._renderItemPositions();
 
-        this._renderNavButtons();
-        this._renderIndicator();
         this._renderSelectedItem();
         this._renderItemsVisibility();
         this._renderUserInteraction();
@@ -410,6 +410,7 @@ var Gallery = CollectionWidget.inherit({
 
     _renderContent: function() {
         this._renderContentImpl();
+        this._fireContentReadyAction();
     },
 
     _dimensionChanged: function() {
