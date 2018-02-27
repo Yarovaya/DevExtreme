@@ -149,10 +149,10 @@ var LoadIndicator = Widget.inherit({
     },
 
     _initMarkup: function() {
-        this.callBase();
         this._renderWrapper();
         this._renderIndicatorContent();
         this._renderMarkup();
+        this.callBase();
     },
 
     _renderWrapper: function() {

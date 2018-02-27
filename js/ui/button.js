@@ -225,9 +225,8 @@ var Button = Widget.inherit({
         this.setAria("role", "button");
         this._updateAriaLabel();
 
-        this.callBase();
-
         this._updateContent();
+        this.callBase();
     },
 
     _renderInkRipple: function() {
