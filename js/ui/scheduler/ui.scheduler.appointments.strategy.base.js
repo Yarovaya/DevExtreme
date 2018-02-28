@@ -204,7 +204,7 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     calculateAppointmentHeight: function() {
-        return 0;
+        return 50;
     },
 
     calculateAppointmentWidth: function() {
