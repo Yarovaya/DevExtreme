@@ -43,7 +43,7 @@ var SchedulerTableCreator = {
                     dataValue;
 
                 if(options.getCellData) {
-                    cellDataObject = options.getCellData(td, i, j);
+                    cellDataObject = options.viewDirection === "vertical" ? options.getCellData(td, j, i) : options.getCellData(td, i, j);
                     dataKey = cellDataObject.key;
                     dataValue = cellDataObject.value;
                     dataKey && dataUtils.data(td, dataKey, dataValue);
@@ -80,7 +80,8 @@ var SchedulerTableCreator = {
 
                 } else {
                     if(options.getCellText) {
-                        td.innerHTML = "<div>" + options.getCellText(i, j) + "</div>";
+                        var cellText = options.viewDirection === "vertical" ? options.getCellText(j, i) : options.getCellText(i, j);
+                        td.innerHTML = "<div>" + cellText + "</div>";
                     }
                 }
 

@@ -25,13 +25,26 @@
 </head>
 
 <body>
-    <div id="button"></div>
+    <div id="scheduler"></div>
 
     <script>
         $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
+            var data = [
+    {
+        text: "Website Re-Design Plan",
+        startDate: new Date(2017, 4, 25, 9, 30),
+        endDate: new Date(2017, 4, 25, 11, 30)
+    }
+];
+
+            $("#scheduler").dxScheduler({
+                dataSource: data,
+                views: ["day", "week", "workWeek", "month"],
+                viewDirection: "vertical",
+                currentView: "day",
+                currentDate: new Date(2017, 4, 25),
+                startDayHour: 9,
+                height: 600
             });
         });
     </script>
