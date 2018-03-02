@@ -33,7 +33,8 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     WORKSPACE_WITH_COUNT_CLASS = "dx-scheduler-work-space-count",
     WORKSPACE_WITH_ODD_CELLS_CLASS = "dx-scheduler-work-space-odd-cells",
     WORKSPACE_WITH_OVERLAPPING_CLASS = "dx-scheduler-work-space-overlapping",
-    WORKSPACE_WITH_VERTICAL_DIRECTION_CLASS = "dx-scheduler-work-space-vertical",
+
+    WORKSPACE_ROTATED_CLASS = "dx-scheduler-work-space-rotated",
 
     WORKSPACE_GROUPED_ATTR = "dx-group-row-count",
 
@@ -383,7 +384,7 @@ var SchedulerWorkSpace = Widget.inherit({
             indicatorTime: new Date(),
             indicatorUpdateInterval: 5 * toMs("minute"),
             shadeUntilCurrentTime: true,
-            viewDirection: "vertical"
+            rotated: false
         });
     },
 
@@ -421,6 +422,10 @@ var SchedulerWorkSpace = Widget.inherit({
                 this._toggleWorkSpaceCountClass();
                 this._toggleFixedScrollableClass();
                 break;
+            case "rotated":
+                this._cleanWorkSpace();
+                this._toggleWorkspaceRotatedClass();
+                break;
             case "crossScrollingEnabled":
                 this._toggleHorizontalScrollClass();
                 this._dateTableScrollable.option(this._dateTableScrollableConfig());
@@ -450,7 +455,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._toggleWorkSpaceCountClass();
         this._toggleWorkSpaceWithOddCells();
         this._toggleWorkSpaceOverlappingClass();
-        this._toggleDirectionClass();
+        this._toggleWorkspaceRotatedClass();
 
         this.$element()
             .addClass(COMPONENT_CLASS)
@@ -463,8 +468,8 @@ var SchedulerWorkSpace = Widget.inherit({
         this._createWorkSpaceElements();
     },
 
-    _toggleDirectionClass: function() {
-        this.$element().toggleClass(WORKSPACE_WITH_VERTICAL_DIRECTION_CLASS, this.option("viewDirection") === "vertical");
+    _toggleWorkspaceRotatedClass: function() {
+        this.$element().toggleClass(WORKSPACE_ROTATED_CLASS, this.option("rotated"));
     },
     _toggleHorizontalScrollClass: function() {
         this.$element().toggleClass(WORKSPACE_WITH_BOTH_SCROLLS_CLASS, this.option("crossScrollingEnabled"));
@@ -1069,6 +1074,8 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _renderAllDayPanel: function() {
+        if(this.option("rotated")) return;
+
         var cellCount = this._getCellCount() * (this._getGroupCount() || 1);
 
         var cellTemplates = this._renderTableBody({
@@ -1119,10 +1126,12 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _toggleAllDayVisibility: function() {
-        var showAllDayPanel = this.option("showAllDayPanel");
+        var showAllDayPanel = this.option("showAllDayPanel"),
+            rotated = this.option("rotated");
+
         this._$allDayPanel.toggle(showAllDayPanel);
-        this._$allDayTitle.toggleClass(ALL_DAY_TITLE_HIDDEN_CLASS, !showAllDayPanel);
-        this.$element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, showAllDayPanel);
+        this._$allDayTitle.toggleClass(ALL_DAY_TITLE_HIDDEN_CLASS, !showAllDayPanel || rotated);
+        this.$element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, showAllDayPanel && !rotated);
 
         this._changeAllDayVisibility();
 
@@ -1141,7 +1150,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _renderTimePanel: function() {
-        if(this.option("viewDirection") === "vertical") {
+        if(this.option("rotated")) {
             this._renderTableBody({
                 container: getPublicElement(this._$timePanel),
                 rowCount: 1,
@@ -1150,7 +1159,7 @@ var SchedulerWorkSpace = Widget.inherit({
                 rowClass: TIME_PANEL_ROW_CLASS,
                 cellTemplate: this.option("timeCellTemplate"),
                 getCellText: this._getTimeText.bind(this),
-                viewDirection: "vertical"
+                rotated: true
             });
         } else {
             this._renderTableBody({
@@ -1184,7 +1193,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _getTimeText: function(i) {
         // T410490: incorrectly displaying time slots on Linux
         var startViewDate = this._getTimeCellDate(i);
-        if(i % 2 === 0 || this.option("viewDirection") === "vertical") {
+        if(i % 2 === 0 || this.option("rotated")) {
             return dateLocalization.format(startViewDate, "shorttime");
         }
         return "";
@@ -1202,7 +1211,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _renderDateTable: function() {
         var groupCount = this._getGroupCount();
 
-        if(this.option("viewDirection") === "vertical") {
+        if(this.option("rotated")) {
             this._renderTableBody({
                 container: getPublicElement(this._$dateTable),
                 rowCount: this._getTotalCellCount(groupCount),
@@ -1505,7 +1514,7 @@ var SchedulerWorkSpace = Widget.inherit({
         var cellIndex,
             rowIndex;
 
-        if(this.option("viewDirection") === "vertical") {
+        if(this.option("rotated")) {
             cellIndex = Math.floor(index / this._getCellCount());
             rowIndex = index - this._getCellCount() * cellIndex;
 
@@ -1880,7 +1889,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     getMaxAllowedVerticalPosition: function() {
         if(!this._maxAllowedVerticalPosition) {
-            var rows = this.option("viewDirection") === "vertical" ? this._getCellCount() : this._getRowCount(),
+            var rows = this.option("rotated") ? this._getCellCount() : this._getRowCount(),
                 row = this._$dateTable.find("tr:nth-child(" + rows + "n)"),
                 maxPosition = $(row).position().top + $(row).outerHeight();
 

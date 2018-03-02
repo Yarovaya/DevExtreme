@@ -61,7 +61,7 @@ var WIDGET_CLASS = "dx-scheduler",
 var VIEWS_CONFIG = {
     day: {
         workSpace: SchedulerWorkSpaceDay,
-        renderingStrategy: "horizontal"
+        renderingStrategy: "vertical"
     },
     week: {
         workSpace: SchedulerWorkSpaceWeek,
@@ -311,6 +311,13 @@ var Scheduler = Widget.inherit({
                 * @publicName agendaDuration
                 * @type number
                 * @default 7
+                */
+
+                /**
+                * @name dxSchedulerOptions_views_rotated
+                * @publicName rotated
+                * @type Boolean
+                * @default false
                 */
 
                 /**
@@ -1828,6 +1835,8 @@ var Scheduler = Widget.inherit({
     },
 
     _getAppointmentsRenderingStrategy: function() {
+        this._checkCurrentStrategy();
+
         return VIEWS_CONFIG[this._getCurrentViewType()].renderingStrategy;
     },
 
@@ -1845,6 +1854,14 @@ var Scheduler = Widget.inherit({
         this._recalculateWorkspace();
 
         countConfig.startDate && this._header && this._header.option("currentDate", this._workSpace.getStartViewDate());
+    },
+
+    _checkCurrentStrategy: function() {
+        var strategy = VIEWS_CONFIG[this._getCurrentViewType()].renderingStrategy;
+
+        if(strategy === "vertical" && this._currentView.rotated) {
+            VIEWS_CONFIG[this._getCurrentViewType()].renderingStrategy = "horizontal";
+        }
     },
 
     _getViewCountConfig: function() {

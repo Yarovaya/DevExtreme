@@ -132,6 +132,15 @@ QUnit.testStart(function() {
         assert.notOk($element.hasClass("dx-scheduler-work-space-count"), "dxSchedulerWorkSpace has 'dx-scheduler-workspace' css class");
     });
 
+    QUnit.test("Scheduler workspace with rotated option should have a right css class", function(assert) {
+        var $element = this.instance.$element();
+        assert.notOk($element.hasClass("dx-scheduler-work-space-rotated"), "dxSchedulerWorkSpace hasn't 'dx-scheduler-work-space-rotated' css class");
+
+        this.instance.option("rotated", true);
+        $element = this.instance.$element();
+        assert.ok($element.hasClass("dx-scheduler-work-space-rotated"), "dxSchedulerWorkSpace has 'dx-scheduler-work-space-rotated' css class");
+    });
+
     QUnit.test("Scheduler workspace should contain time panel, header panel, allday panel and content", function(assert) {
         var $element = this.instance.$element();
 
@@ -158,6 +167,19 @@ QUnit.testStart(function() {
         this.instance.option("showAllDayPanel", true);
 
         assert.notEqual($allDayPanel.css("display"), "none", "allDay panel is visible");
+    });
+
+    QUnit.test("All day panel is invisible, if view option 'rotated' equal true", function(assert) {
+        this.instance.option("rotated", true);
+
+        var $element = this.instance.$element(),
+            $allDayPanel = $element.find(".dx-scheduler-all-day-panel");
+
+        assert.equal($allDayPanel.css("display"), "none", "allDay panel is invisible");
+
+        this.instance.option("showAllDayPanel", true);
+
+        assert.equal($allDayPanel.css("display"), "none", "allDay panel is invisible");
     });
 
     QUnit.test("All day title has a special CSS class, if showAllDayPanel = false", function(assert) {
