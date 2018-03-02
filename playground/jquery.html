@@ -39,8 +39,21 @@
 
             $("#scheduler").dxScheduler({
                 dataSource: data,
-                views: ["day", "week", "workWeek", "month"],
+                views: [{ 
+                    type: "day",
+                    rotated: true 
+                }, { 
+                    type: "day",
+                    name: "normal day"
+                }, {
+                    type: "week",
+                    rotated: true 
+                }, { 
+                    type: "week",
+                    name: "normal week"
+                }, "month"],
                 viewDirection: "vertical",
+                showAllDayPanel: true,
                 currentView: "day",
                 currentDate: new Date(2017, 4, 25),
                 startDayHour: 9,

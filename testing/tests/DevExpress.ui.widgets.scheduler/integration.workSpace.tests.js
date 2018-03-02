@@ -1478,3 +1478,18 @@ QUnit.test("intervalCount should be passed to workSpace", function(assert) {
     assert.equal(workSpace.option("intervalCount"), 2, "option intervalCount was passed");
 });
 
+QUnit.test("rotated should be passed to workSpace", function(assert) {
+    this.createInstance({
+        views: [{
+            type: "day",
+            name: "Day",
+            rotated: true
+        }],
+        currentView: "Day"
+    });
+
+    var workSpace = this.instance.getWorkSpace();
+
+    assert.ok(workSpace.option("rotated"), "option 'rotated' was passed");
+});
+
