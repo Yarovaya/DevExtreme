@@ -461,6 +461,13 @@ QUnit.testStart(function() {
             "Exception messages should be correct"
         );
     });
+
+    QUnit.test("Scrollable config should have right direction according to 'rotated' option state", function(assert) {
+        this.instance.option("rotated", true);
+
+        var scrollable = this.instance.getScrollable();
+        assert.equal(scrollable.option("direction"), "both", "right direction");
+    });
 })("Work Space Base");
 
 (function() {
