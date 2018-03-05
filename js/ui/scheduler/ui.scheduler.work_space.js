@@ -424,6 +424,7 @@ var SchedulerWorkSpace = Widget.inherit({
                 break;
             case "rotated":
                 this._cleanWorkSpace();
+                this._dateTableScrollable.option(this._dateTableScrollableConfig());
                 this._toggleWorkspaceRotatedClass();
                 break;
             case "crossScrollingEnabled":
@@ -574,13 +575,18 @@ var SchedulerWorkSpace = Widget.inherit({
             useNative: false,
             bounceEnabled: false,
             updateManually: true,
-            pushBackValue: 0
+            pushBackValue: 0,
+            direction: this._getDateTableScrollableDirection()
         };
         if(this.option("crossScrollingEnabled")) {
             config = extend(config, this._createCrossScrollingConfig());
         }
 
         return config;
+    },
+
+    _getDateTableScrollableDirection: function() {
+        return this.option("rotated") ? "both" : "vertical";
     },
 
     _createCrossScrollingConfig: function() {
@@ -639,7 +645,12 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._headerScrollable.$content().append(this._$headerPanel, this._$allDayContainer, this._$allDayPanel);
         this._dateTableScrollable.$content().append(this._$dateTable);
-        this._sidebarScrollable.$content().append(this._$timePanel);
+
+        if(this.option("rotated")) {
+            this._headerScrollable.$content().append(this._$timePanel);
+        } else {
+            this._sidebarScrollable.$content().append(this._$timePanel);
+        }
     },
 
     _createHeaderScrollable: function() {
