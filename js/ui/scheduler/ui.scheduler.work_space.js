@@ -1231,7 +1231,7 @@ var SchedulerWorkSpace = Widget.inherit({
                 rowClass: this._getDateTableRowClass(),
                 cellTemplate: this.option("dataCellTemplate"),
                 getCellData: this._getCellData.bind(this),
-                viewDirection: "vertical"
+                rotated: true
             });
         } else {
             this._renderTableBody({
@@ -1515,6 +1515,10 @@ var SchedulerWorkSpace = Widget.inherit({
 
     getHeaderPanelHeight: function() {
         return this._$headerPanel && this._$headerPanel.outerHeight(true);
+    },
+
+    getTimePanelHeight: function() {
+        return this._$timePanel.outerHeight();
     },
 
     getTimePanelWidth: function() {

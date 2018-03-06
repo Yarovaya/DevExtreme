@@ -3157,6 +3157,22 @@ QUnit.testStart(function() {
         assert.deepEqual(secondCellData.endDate, new Date(2017, 5, 27, 0), "cell has right endtDate");
     });
 
+    QUnit.test("Workspace Day view cells have right cellData with view option 'rotated'", function(assert) {
+        this.createInstance({
+            rotated: true,
+            currentDate: new Date(2018, 2, 6)
+        });
+
+        var firstCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
+            secondCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(24).data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2018, 2, 6, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2018, 2, 6, 0, 30), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2018, 2, 6, 12, 0), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2018, 2, 6, 12, 30), "cell has right endtDate");
+    });
+
     QUnit.test("Get date range", function(assert) {
         this.createInstance({
             intervalCount: 2,
@@ -3278,6 +3294,22 @@ QUnit.testStart(function() {
         assert.deepEqual(thirdCellData.startDate, new Date(2017, 6, 9, 23), "cell has right startDate");
         assert.deepEqual(thirdCellData.endDate, new Date(2017, 6, 10, 0), "cell has right endtDate");
     });
+
+        // QUnit.test("Workspace Week view cells have right cellData with view option 'rotated'", function(assert) {
+    //     this.createInstance({
+    //         rotated: true,
+    //         currentDate: new Date(2018, 2, 6)
+    //     });
+
+    //     var firstCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
+    //         secondCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(24).data("dxCellData");
+
+    //     assert.deepEqual(firstCellData.startDate, new Date(2018, 2, 6, 0), "cell has right startDate");
+    //     assert.deepEqual(firstCellData.endDate, new Date(2018, 2, 6, 0, 30), "cell has right endtDate");
+
+    //     assert.deepEqual(secondCellData.startDate, new Date(2018, 2, 6, 12, 0), "cell has right startDate");
+    //     assert.deepEqual(secondCellData.endDate, new Date(2018, 2, 6, 12, 30), "cell has right endtDate");
+    // });
 
     QUnit.test("Get date range", function(assert) {
         this.createInstance({

@@ -2007,10 +2007,14 @@ var Scheduler = Widget.inherit({
     },
 
     getWorkSpaceHeaderPanelHeight: function() {
-        return this._workSpace.getHeaderPanelHeight();
+        return !this._workSpace.option("rotated") ? this._workSpace.getHeaderPanelHeight() : this._workSpace.getTimePanelHeight();
     },
 
     getWorkSpaceDateTableOffset: function() {
+        if(this._workSpace.option("rotated")) {
+            return 0;
+        }
+
         return !this.option("crossScrollingEnabled") || this.option("rtlEnabled") ? this._workSpace.getTimePanelWidth() : 0;
     },
 
