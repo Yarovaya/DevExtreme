@@ -1225,8 +1225,8 @@ var SchedulerWorkSpace = Widget.inherit({
         if(this.option("rotated")) {
             this._renderTableBody({
                 container: getPublicElement(this._$dateTable),
-                rowCount: this._getTotalCellCount(groupCount),
-                cellCount: this._getTotalRowCount(groupCount),
+                rowCount: this._getTotalRowCount(groupCount),
+                cellCount: this._getTotalCellCount(groupCount),
                 cellClass: this._getDateTableCellClass.bind(this),
                 rowClass: this._getDateTableRowClass(),
                 cellTemplate: this.option("dataCellTemplate"),
@@ -1461,7 +1461,11 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _calculateCellIndex: function(rowIndex, cellIndex) {
         cellIndex = cellIndex % this._getCellCount();
-        return this._getRowCount() * cellIndex + rowIndex;
+        if(this.option("rotated")) {
+            return this._getCellCount() * rowIndex + cellIndex;
+        } else {
+            return this._getRowCount() * cellIndex + rowIndex;
+        }
     },
 
     _renderTableBody: function(options, delayCellTemplateRendering) {
@@ -1529,14 +1533,14 @@ var SchedulerWorkSpace = Widget.inherit({
         var cellIndex,
             rowIndex;
 
-        if(this.option("rotated")) {
-            cellIndex = Math.floor(index / this._getCellCount());
-            rowIndex = index - this._getCellCount() * cellIndex;
+        // if(this.option("rotated")) {
+        //     rowIndex = Math.floor(index / this._getRowCount());
+        //     cellIndex = index - this._getRowCount() * rowIndex;
 
-        } else {
-            cellIndex = Math.floor(index / this._getRowCount());
-            rowIndex = index - this._getRowCount() * cellIndex;
-        }
+        // } else {
+        cellIndex = Math.floor(index / this._getRowCount());
+        rowIndex = index - this._getRowCount() * cellIndex;
+        // }
 
         return {
             cellIndex: cellIndex,
@@ -1561,7 +1565,13 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _calculateHiddenInterval: function(rowIndex, cellIndex) {
-        var dayCount = cellIndex % this._getCellCount();
+        var dayCount;
+        if(this.option("rotated")) {
+            dayCount = rowIndex % this._getCellCount();
+        } else {
+            dayCount = cellIndex % this._getCellCount();
+        }
+
         return dayCount * this._getHiddenInterval();
     },
 
@@ -1904,7 +1914,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     getMaxAllowedVerticalPosition: function() {
         if(!this._maxAllowedVerticalPosition) {
-            var rows = this.option("rotated") ? this._getCellCount() : this._getRowCount(),
+            var rows = this._getRowCount(),
                 row = this._$dateTable.find("tr:nth-child(" + rows + "n)"),
                 maxPosition = $(row).position().top + $(row).outerHeight();
 

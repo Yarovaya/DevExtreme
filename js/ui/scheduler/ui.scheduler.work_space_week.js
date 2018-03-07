@@ -16,11 +16,19 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
     },
 
     _getRowCount: function() {
-        return this._getCellCountInDay();
+        if(this.option("rotated")) {
+            return 7;
+        } else {
+            return this._getCellCountInDay();
+        }
     },
 
     _getCellCount: function() {
-        return 7 * this.option("intervalCount");
+        if(this.option("rotated")) {
+            return this._getCellCountInDay();
+        } else {
+            return 7 * this.option("intervalCount");
+        }
     },
 
     _getDateByIndex: function(headerIndex) {

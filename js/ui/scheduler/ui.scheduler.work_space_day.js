@@ -11,11 +11,19 @@ var SchedulerWorkSpaceDay = SchedulerWorkSpace.inherit({
     },
 
     _getRowCount: function() {
-        return this._getCellCountInDay();
+        if(this.option("rotated")) {
+            return 1;
+        } else {
+            return this._getCellCountInDay();
+        }
     },
 
     _getCellCount: function() {
-        return this.option("intervalCount");
+        if(this.option("rotated")) {
+            return this._getCellCountInDay();
+        } else {
+            return this.option("intervalCount");
+        }
     },
 
     _setFirstViewDate: function() {

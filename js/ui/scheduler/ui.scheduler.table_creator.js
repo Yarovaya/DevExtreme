@@ -43,7 +43,8 @@ var SchedulerTableCreator = {
                     dataValue;
 
                 if(options.getCellData) {
-                    cellDataObject = options.rotated ? options.getCellData(td, j, i) : options.getCellData(td, i, j);
+                    cellDataObject = options.getCellData(td, i, j);
+                    // cellDataObject = options.rotated ? options.getCellData(td, j, i) : options.getCellData(td, i, j);
                     dataKey = cellDataObject.key;
                     dataValue = cellDataObject.value;
                     dataKey && dataUtils.data(td, dataKey, dataValue);
