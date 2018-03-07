@@ -88,6 +88,26 @@ QUnit.test("Scheduler should have a right rendering strategy for views with conf
     assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, "Strategy is OK");
 });
 
+QUnit.test("Scheduler should have a right rendering strategy for rotated views", function(assert) {
+    this.createInstance({
+        views: [{
+            name: "Day",
+            type: "day",
+            rotated: true
+        }, {
+            name: "Week",
+            type: "week",
+            rotated: true
+        }],
+        currentView: "Day"
+    });
+
+    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, "Strategy is OK");
+
+    this.instance.option("currentView", "Week");
+    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, "Strategy is OK");
+});
+
 QUnit.module("Appointments", moduleOptions);
 
 QUnit.test("Exception should be thrown if appointment has no start date", function(assert) {

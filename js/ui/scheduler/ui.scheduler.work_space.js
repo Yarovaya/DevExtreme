@@ -34,6 +34,8 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     WORKSPACE_WITH_ODD_CELLS_CLASS = "dx-scheduler-work-space-odd-cells",
     WORKSPACE_WITH_OVERLAPPING_CLASS = "dx-scheduler-work-space-overlapping",
 
+    WORKSPACE_ROTATED_CLASS = "dx-scheduler-work-space-rotated",
+
     WORKSPACE_GROUPED_ATTR = "dx-group-row-count",
 
     TIME_PANEL_CLASS = "dx-scheduler-time-panel",
@@ -381,7 +383,8 @@ var SchedulerWorkSpace = Widget.inherit({
             allowMultipleCellSelection: true,
             indicatorTime: new Date(),
             indicatorUpdateInterval: 5 * toMs("minute"),
-            shadeUntilCurrentTime: true
+            shadeUntilCurrentTime: true,
+            rotated: false
         });
     },
 
@@ -419,6 +422,11 @@ var SchedulerWorkSpace = Widget.inherit({
                 this._toggleWorkSpaceCountClass();
                 this._toggleFixedScrollableClass();
                 break;
+            case "rotated":
+                this._cleanWorkSpace();
+                this._dateTableScrollable.option(this._dateTableScrollableConfig());
+                this._toggleWorkspaceRotatedClass();
+                break;
             case "crossScrollingEnabled":
                 this._toggleHorizontalScrollClass();
                 this._dateTableScrollable.option(this._dateTableScrollableConfig());
@@ -448,6 +456,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._toggleWorkSpaceCountClass();
         this._toggleWorkSpaceWithOddCells();
         this._toggleWorkSpaceOverlappingClass();
+        this._toggleWorkspaceRotatedClass();
 
         this.$element()
             .addClass(COMPONENT_CLASS)
@@ -460,6 +469,9 @@ var SchedulerWorkSpace = Widget.inherit({
         this._createWorkSpaceElements();
     },
 
+    _toggleWorkspaceRotatedClass: function() {
+        this.$element().toggleClass(WORKSPACE_ROTATED_CLASS, this.option("rotated"));
+    },
     _toggleHorizontalScrollClass: function() {
         this.$element().toggleClass(WORKSPACE_WITH_BOTH_SCROLLS_CLASS, this.option("crossScrollingEnabled"));
     },
@@ -563,13 +575,18 @@ var SchedulerWorkSpace = Widget.inherit({
             useNative: false,
             bounceEnabled: false,
             updateManually: true,
-            pushBackValue: 0
+            pushBackValue: 0,
+            direction: this._getDateTableScrollableDirection()
         };
         if(this.option("crossScrollingEnabled")) {
             config = extend(config, this._createCrossScrollingConfig());
         }
 
         return config;
+    },
+
+    _getDateTableScrollableDirection: function() {
+        return this.option("rotated") ? "both" : "vertical";
     },
 
     _createCrossScrollingConfig: function() {
@@ -628,7 +645,12 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._headerScrollable.$content().append(this._$headerPanel, this._$allDayContainer, this._$allDayPanel);
         this._dateTableScrollable.$content().append(this._$dateTable);
-        this._sidebarScrollable.$content().append(this._$timePanel);
+
+        if(this.option("rotated")) {
+            this._headerScrollable.$content().append(this._$timePanel);
+        } else {
+            this._sidebarScrollable.$content().append(this._$timePanel);
+        }
     },
 
     _createHeaderScrollable: function() {
@@ -1063,6 +1085,8 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _renderAllDayPanel: function() {
+        if(this.option("rotated")) return;
+
         var cellCount = this._getCellCount() * (this._getGroupCount() || 1);
 
         var cellTemplates = this._renderTableBody({
@@ -1113,10 +1137,12 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _toggleAllDayVisibility: function() {
-        var showAllDayPanel = this.option("showAllDayPanel");
+        var showAllDayPanel = this.option("showAllDayPanel"),
+            rotated = this.option("rotated");
+
         this._$allDayPanel.toggle(showAllDayPanel);
-        this._$allDayTitle.toggleClass(ALL_DAY_TITLE_HIDDEN_CLASS, !showAllDayPanel);
-        this.$element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, showAllDayPanel);
+        this._$allDayTitle.toggleClass(ALL_DAY_TITLE_HIDDEN_CLASS, !showAllDayPanel || rotated);
+        this.$element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, showAllDayPanel && !rotated);
 
         this._changeAllDayVisibility();
 
@@ -1135,15 +1161,28 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _renderTimePanel: function() {
-        this._renderTableBody({
-            container: getPublicElement(this._$timePanel),
-            rowCount: this._getTimePanelRowCount(),
-            cellCount: 1,
-            cellClass: this._getTimeCellClass.bind(this),
-            rowClass: TIME_PANEL_ROW_CLASS,
-            cellTemplate: this.option("timeCellTemplate"),
-            getCellText: this._getTimeText.bind(this)
-        });
+        if(this.option("rotated")) {
+            this._renderTableBody({
+                container: getPublicElement(this._$timePanel),
+                rowCount: 1,
+                cellCount: this._getTimePanelRowCount(),
+                cellClass: this._getTimeCellClass.bind(this),
+                rowClass: TIME_PANEL_ROW_CLASS,
+                cellTemplate: this.option("timeCellTemplate"),
+                getCellText: this._getTimeText.bind(this),
+                rotated: true
+            });
+        } else {
+            this._renderTableBody({
+                container: getPublicElement(this._$timePanel),
+                rowCount: this._getTimePanelRowCount(),
+                cellCount: 1,
+                cellClass: this._getTimeCellClass.bind(this),
+                rowClass: TIME_PANEL_ROW_CLASS,
+                cellTemplate: this.option("timeCellTemplate"),
+                getCellText: this._getTimeText.bind(this)
+            });
+        }
     },
 
     _getTimePanelRowCount: function() {
@@ -1165,7 +1204,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _getTimeText: function(i) {
         // T410490: incorrectly displaying time slots on Linux
         var startViewDate = this._getTimeCellDate(i);
-        if(i % 2 === 0) {
+        if(i % 2 === 0 || this.option("rotated")) {
             return dateLocalization.format(startViewDate, "shorttime");
         }
         return "";
@@ -1182,15 +1221,29 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _renderDateTable: function() {
         var groupCount = this._getGroupCount();
-        this._renderTableBody({
-            container: getPublicElement(this._$dateTable),
-            rowCount: this._getTotalRowCount(groupCount),
-            cellCount: this._getTotalCellCount(groupCount),
-            cellClass: this._getDateTableCellClass.bind(this),
-            rowClass: this._getDateTableRowClass(),
-            cellTemplate: this.option("dataCellTemplate"),
-            getCellData: this._getCellData.bind(this)
-        });
+
+        if(this.option("rotated")) {
+            this._renderTableBody({
+                container: getPublicElement(this._$dateTable),
+                rowCount: this._getTotalRowCount(groupCount),
+                cellCount: this._getTotalCellCount(groupCount),
+                cellClass: this._getDateTableCellClass.bind(this),
+                rowClass: this._getDateTableRowClass(),
+                cellTemplate: this.option("dataCellTemplate"),
+                getCellData: this._getCellData.bind(this),
+                rotated: true
+            });
+        } else {
+            this._renderTableBody({
+                container: getPublicElement(this._$dateTable),
+                rowCount: this._getTotalRowCount(groupCount),
+                cellCount: this._getTotalCellCount(groupCount),
+                cellClass: this._getDateTableCellClass.bind(this),
+                rowClass: this._getDateTableRowClass(),
+                cellTemplate: this.option("dataCellTemplate"),
+                getCellData: this._getCellData.bind(this)
+            });
+        }
 
         this._attachTablesEvents();
     },
@@ -1408,7 +1461,11 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _calculateCellIndex: function(rowIndex, cellIndex) {
         cellIndex = cellIndex % this._getCellCount();
-        return this._getRowCount() * cellIndex + rowIndex;
+        if(this.option("rotated")) {
+            return this._getCellCount() * rowIndex + cellIndex;
+        } else {
+            return this._getRowCount() * cellIndex + rowIndex;
+        }
     },
 
     _renderTableBody: function(options, delayCellTemplateRendering) {
@@ -1464,13 +1521,26 @@ var SchedulerWorkSpace = Widget.inherit({
         return this._$headerPanel && this._$headerPanel.outerHeight(true);
     },
 
+    getTimePanelHeight: function() {
+        return this._$timePanel.outerHeight();
+    },
+
     getTimePanelWidth: function() {
         return this._$timePanel.outerWidth();
     },
 
     _getCellCoordinatesByIndex: function(index) {
-        var cellIndex = Math.floor(index / this._getRowCount()),
-            rowIndex = index - this._getRowCount() * cellIndex;
+        var cellIndex,
+            rowIndex;
+
+        // if(this.option("rotated")) {
+        //     rowIndex = Math.floor(index / this._getRowCount());
+        //     cellIndex = index - this._getRowCount() * rowIndex;
+
+        // } else {
+        cellIndex = Math.floor(index / this._getRowCount());
+        rowIndex = index - this._getRowCount() * cellIndex;
+        // }
 
         return {
             cellIndex: cellIndex,
@@ -1495,7 +1565,13 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _calculateHiddenInterval: function(rowIndex, cellIndex) {
-        var dayCount = cellIndex % this._getCellCount();
+        var dayCount;
+        if(this.option("rotated")) {
+            dayCount = rowIndex % this._getCellCount();
+        } else {
+            dayCount = cellIndex % this._getCellCount();
+        }
+
         return dayCount * this._getHiddenInterval();
     },
 

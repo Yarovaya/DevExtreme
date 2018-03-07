@@ -314,6 +314,13 @@ var Scheduler = Widget.inherit({
                 */
 
                 /**
+                * @name dxSchedulerOptions_views_rotated
+                * @publicName rotated
+                * @type Boolean
+                * @default false
+                */
+
+                /**
                 * @name dxSchedulerOptions_currentView
                 * @publicName currentView
                 * @type Enums.SchedulerViewType
@@ -1828,6 +1835,8 @@ var Scheduler = Widget.inherit({
     },
 
     _getAppointmentsRenderingStrategy: function() {
+        this._checkCurrentStrategy();
+
         return VIEWS_CONFIG[this._getCurrentViewType()].renderingStrategy;
     },
 
@@ -1845,6 +1854,14 @@ var Scheduler = Widget.inherit({
         this._recalculateWorkspace();
 
         countConfig.startDate && this._header && this._header.option("currentDate", this._workSpace.getStartViewDate());
+    },
+
+    _checkCurrentStrategy: function() {
+        var strategy = VIEWS_CONFIG[this._getCurrentViewType()].renderingStrategy;
+
+        if(strategy === "vertical" && this._currentView.rotated) {
+            VIEWS_CONFIG[this._getCurrentViewType()].renderingStrategy = "horizontal";
+        }
     },
 
     _getViewCountConfig: function() {
@@ -1990,10 +2007,14 @@ var Scheduler = Widget.inherit({
     },
 
     getWorkSpaceHeaderPanelHeight: function() {
-        return this._workSpace.getHeaderPanelHeight();
+        return !this._workSpace.option("rotated") ? this._workSpace.getHeaderPanelHeight() : this._workSpace.getTimePanelHeight();
     },
 
     getWorkSpaceDateTableOffset: function() {
+        if(this._workSpace.option("rotated")) {
+            return 0;
+        }
+
         return !this.option("crossScrollingEnabled") || this.option("rtlEnabled") ? this._workSpace.getTimePanelWidth() : 0;
     },
 

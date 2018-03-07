@@ -10,7 +10,7 @@ var MAX_APPOINTMENT_HEIGHT = 100,
 
 var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     _needVerifyItemSize: function() {
-        return true;
+        return false;
     },
 
     calculateAppointmentWidth: function(appointment, position) {

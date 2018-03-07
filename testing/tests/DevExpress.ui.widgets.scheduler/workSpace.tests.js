@@ -132,6 +132,15 @@ QUnit.testStart(function() {
         assert.notOk($element.hasClass("dx-scheduler-work-space-count"), "dxSchedulerWorkSpace has 'dx-scheduler-workspace' css class");
     });
 
+    QUnit.test("Scheduler workspace with rotated option should have a right css class", function(assert) {
+        var $element = this.instance.$element();
+        assert.notOk($element.hasClass("dx-scheduler-work-space-rotated"), "dxSchedulerWorkSpace hasn't 'dx-scheduler-work-space-rotated' css class");
+
+        this.instance.option("rotated", true);
+        $element = this.instance.$element();
+        assert.ok($element.hasClass("dx-scheduler-work-space-rotated"), "dxSchedulerWorkSpace has 'dx-scheduler-work-space-rotated' css class");
+    });
+
     QUnit.test("Scheduler workspace should contain time panel, header panel, allday panel and content", function(assert) {
         var $element = this.instance.$element();
 
@@ -158,6 +167,19 @@ QUnit.testStart(function() {
         this.instance.option("showAllDayPanel", true);
 
         assert.notEqual($allDayPanel.css("display"), "none", "allDay panel is visible");
+    });
+
+    QUnit.test("All day panel is invisible, if view option 'rotated' equal true", function(assert) {
+        this.instance.option("rotated", true);
+
+        var $element = this.instance.$element(),
+            $allDayPanel = $element.find(".dx-scheduler-all-day-panel");
+
+        assert.equal($allDayPanel.css("display"), "none", "allDay panel is invisible");
+
+        this.instance.option("showAllDayPanel", true);
+
+        assert.equal($allDayPanel.css("display"), "none", "allDay panel is invisible");
     });
 
     QUnit.test("All day title has a special CSS class, if showAllDayPanel = false", function(assert) {
@@ -438,6 +460,13 @@ QUnit.testStart(function() {
             },
             "Exception messages should be correct"
         );
+    });
+
+    QUnit.test("Scrollable config should have right direction according to 'rotated' option state", function(assert) {
+        this.instance.option("rotated", true);
+
+        var scrollable = this.instance.getScrollable();
+        assert.equal(scrollable.option("direction"), "both", "right direction");
     });
 })("Work Space Base");
 
@@ -3128,6 +3157,22 @@ QUnit.testStart(function() {
         assert.deepEqual(secondCellData.endDate, new Date(2017, 5, 27, 0), "cell has right endtDate");
     });
 
+    QUnit.test("Workspace Day view cells have right cellData with view option 'rotated'", function(assert) {
+        this.createInstance({
+            rotated: true,
+            currentDate: new Date(2018, 2, 6)
+        });
+
+        var firstCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
+            secondCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(24).data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2018, 2, 6, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2018, 2, 6, 0, 30), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2018, 2, 6, 12, 0), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2018, 2, 6, 12, 30), "cell has right endtDate");
+    });
+
     QUnit.test("Get date range", function(assert) {
         this.createInstance({
             intervalCount: 2,
@@ -3249,6 +3294,22 @@ QUnit.testStart(function() {
         assert.deepEqual(thirdCellData.startDate, new Date(2017, 6, 9, 23), "cell has right startDate");
         assert.deepEqual(thirdCellData.endDate, new Date(2017, 6, 10, 0), "cell has right endtDate");
     });
+
+        // QUnit.test("Workspace Week view cells have right cellData with view option 'rotated'", function(assert) {
+    //     this.createInstance({
+    //         rotated: true,
+    //         currentDate: new Date(2018, 2, 6)
+    //     });
+
+    //     var firstCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
+    //         secondCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(24).data("dxCellData");
+
+    //     assert.deepEqual(firstCellData.startDate, new Date(2018, 2, 6, 0), "cell has right startDate");
+    //     assert.deepEqual(firstCellData.endDate, new Date(2018, 2, 6, 0, 30), "cell has right endtDate");
+
+    //     assert.deepEqual(secondCellData.startDate, new Date(2018, 2, 6, 12, 0), "cell has right startDate");
+    //     assert.deepEqual(secondCellData.endDate, new Date(2018, 2, 6, 12, 30), "cell has right endtDate");
+    // });
 
     QUnit.test("Get date range", function(assert) {
         this.createInstance({

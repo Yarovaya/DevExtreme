@@ -5159,3 +5159,149 @@ QUnit.test("Scheduler should add only one appointment at multiple 'done' button 
     assert.equal($appointments.length, 1, "right appointment quantity");
 });
 
+QUnit.test("Appointment should be rendered correctly if view Day is rotated", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2018, 2, 6),
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2018, 2, 6, 9, 30),
+            endDate: new Date(2018, 2, 6, 10, 30)
+        }],
+        views: [{
+            type: "day",
+            name: "Day",
+            rotated: true
+        }],
+        currentView: "Day"
+    });
+
+    var $appointments = this.instance.$element().find("." + APPOINTMENT_CLASS);
+
+    assert.equal($appointments.length, 1, "Appointment was rendered");
+});
+
+// QUnit.test("Appointment should be rendered correctly if view Week is rotated", function(assert) {
+//     this.createInstance({
+//         currentDate: new Date(2018, 2, 6),
+//         dataSource: [{
+//             text: "a",
+//             startDate: new Date(2018, 2, 6, 9, 30),
+//             endDate: new Date(2018, 2, 6, 10, 30)
+//         }],
+//         views: [{
+//             type: "day",
+//             name: "Day",
+//             rotated: true
+//         }],
+//         currentView: "Day"
+//     });
+
+//     var $appointments = this.instance.$element().find("." + APPOINTMENT_CLASS);
+
+//     assert.equal($appointments.length, 1, "Appointment was rendered");
+// });
+
+QUnit.test("Appointment should be resized correctly if view Day is rotated", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2018, 2, 6),
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2018, 2, 6, 9, 30),
+            endDate: new Date(2018, 2, 6, 10, 30)
+        }],
+        views: [{
+            type: "day",
+            name: "Day",
+            rotated: true
+        }],
+        currentView: "Day"
+    });
+
+    var cellWidth = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).outerWidth(),
+        $appointment = this.instance.$element().find("." + APPOINTMENT_CLASS).first(),
+        initialAppointmentLeft = $appointment.position().left;
+
+    var pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-right").eq(0)).start();
+    pointer.dragStart().drag(cellWidth, 0);
+    pointer.dragEnd();
+
+    $appointment = this.instance.$element().find("." + APPOINTMENT_CLASS).first();
+
+    assert.equal($appointment.position().left, initialAppointmentLeft, "Appointment left is OK");
+    assert.roughEqual($appointment.outerWidth(), cellWidth * 3, 2.001, "Appointment height is OK");
+});
+
+// QUnit.test("Appointment should be resized correctly if view Week is rotated", function(assert) {
+//     this.createInstance({
+//         currentDate: new Date(2018, 2, 6),
+//         dataSource: [{
+//             text: "a",
+//             startDate: new Date(2018, 2, 6, 9, 30),
+//             endDate: new Date(2018, 2, 6, 10, 30)
+//         }],
+//         views: [{
+//             type: "day",
+//             name: "Day",
+//             rotated: true
+//         }],
+//         currentView: "Day"
+//     });
+
+//     var $appointments = this.instance.$element().find("." + APPOINTMENT_CLASS);
+
+//     assert.equal($appointments.length, 1, "Appointment was rendered");
+// })
+
+QUnit.test("Appointment should be dragged correctly if view Day is rotated", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2018, 2, 6),
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2018, 2, 6, 9, 30),
+            endDate: new Date(2018, 2, 6, 10, 30)
+        }],
+        views: [{
+            type: "day",
+            name: "Day",
+            rotated: true
+        }],
+        currentView: "Day",
+        startDayHour: 9
+    });
+
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
+        initialPosition = $appointment.position(),
+        cellWidth = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).outerWidth();
+
+    $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(3).trigger(dragEvents.enter);
+    $appointment.trigger(dragEvents.start);
+    $appointment.trigger(dragEvents.end);
+    this.clock.tick();
+
+    var updatedPosition = this.instance.$element().find("." + APPOINTMENT_CLASS).eq(0).position();
+
+    assert.equal(updatedPosition.top, initialPosition.top, "Top is OK");
+    assert.equal(updatedPosition.left, initialPosition.left + cellWidth * 2, "Left is OK");
+});
+
+// QUnit.test("Appointment should be dragged correctly if view Week is rotated", function(assert) {
+//     this.createInstance({
+//         currentDate: new Date(2018, 2, 6),
+//         dataSource: [{
+//             text: "a",
+//             startDate: new Date(2018, 2, 6, 9, 30),
+//             endDate: new Date(2018, 2, 6, 10, 30)
+//         }],
+//         views: [{
+//             type: "day",
+//             name: "Day",
+//             rotated: true
+//         }],
+//         currentView: "Day"
+//     });
+
+//     var $appointments = this.instance.$element().find("." + APPOINTMENT_CLASS);
+
+//     assert.equal($appointments.length, 1, "Appointment was rendered");
+// })
+
