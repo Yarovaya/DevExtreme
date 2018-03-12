@@ -578,7 +578,7 @@ var SchedulerWorkSpace = Widget.inherit({
             pushBackValue: 0,
             direction: this._getDateTableScrollableDirection()
         };
-        if(this.option("crossScrollingEnabled")) {
+        if(this.option("crossScrollingEnabled") || this.option("rotated")) {
             config = extend(config, this._createCrossScrollingConfig());
         }
 
@@ -625,7 +625,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _createWorkSpaceElements: function() {
-        if(this.option("crossScrollingEnabled")) {
+        if(this.option("crossScrollingEnabled") || this.option("rotated")) {
             this._createWorkSpaceScrollableElements();
         } else {
             this._createWorkSpaceStaticElements();
@@ -633,13 +633,8 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _createWorkSpaceStaticElements: function() {
-        if(this.option("rotated")) {
-            this._dateTableScrollable.$content().append(this._$headerPanel, this._$dateTable);
-            this.$element().append(this._$fixedContainer, this._$timePanel, this._$allDayContainer, this._$allDayPanel, this._dateTableScrollable.$element());
-        } else {
-            this._dateTableScrollable.$content().append(this._$timePanel, this._$dateTable);
-            this.$element().append(this._$fixedContainer, this._$headerPanel, this._$allDayContainer, this._$allDayPanel, this._dateTableScrollable.$element());
-        }
+        this._dateTableScrollable.$content().append(this._$timePanel, this._$dateTable);
+        this.$element().append(this._$fixedContainer, this._$headerPanel, this._$allDayContainer, this._$allDayPanel, this._dateTableScrollable.$element());
     },
 
     _createWorkSpaceScrollableElements: function() {
@@ -648,7 +643,12 @@ var SchedulerWorkSpace = Widget.inherit({
         this._createSidebarScrollable();
         this.$element().append(this._dateTableScrollable.$element());
 
-        this._headerScrollable.$content().append(this._$headerPanel, this._$allDayContainer, this._$allDayPanel);
+        if(this.option("rotated")) {
+            this._sidebarScrollable.$content().append(this._$headerPanel);
+        } else {
+            this._headerScrollable.$content().append(this._$headerPanel);
+        }
+        this._headerScrollable.$content().append(this._$allDayContainer, this._$allDayPanel);
         this._dateTableScrollable.$content().append(this._$dateTable);
 
         if(this.option("rotated")) {
@@ -966,7 +966,11 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getDateHeaderContainer: function() {
-        return this._$thead;
+        if(this.option("rotated")) {
+            return this._$headerPanel;
+        } else {
+            return this._$thead;
+        }
     },
 
     _renderGroupHeader: function() {
@@ -1042,41 +1046,78 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _renderDateHeader: function() {
         var $container = this._getDateHeaderContainer(),
-            $headerRow = $("<tr>").addClass(HEADER_ROW_CLASS),
-            count = this._getCellCount(),
+            count = 7 * this.option("intervalCount"),
             cellTemplate = this._getDateHeaderTemplate(),
             repeatCount = this._calculateHeaderCellRepeatCount(),
-            templateCallbacks = [];
+            templateCallbacks = [],
+            $headerRow,
+            i,
+            j,
+            text,
+            $cell;
 
-        for(var j = 0; j < repeatCount; j++) {
-            for(var i = 0; i < count; i++) {
-                var text = this._getHeaderText(i),
+        if(this.option("rotated")) {
+            for(j = 0; j < repeatCount; j++) {
+                for(i = 0; i < count; i++) {
+                    $headerRow = $("<tr>").addClass(HEADER_ROW_CLASS);
+
+                    text = this._getHeaderText(i);
                     $cell = $("<th>")
-                            .addClass(this._getHeaderPanelCellClass(i))
-                            .attr("title", text);
+                                .addClass(this._getHeaderPanelCellClass(i))
+                                .attr("title", text);
 
-                if(cellTemplate && cellTemplate.render) {
-                    templateCallbacks.push(cellTemplate.render.bind(cellTemplate, {
-                        model: {
-                            text: text,
-                            date: this._getDateByIndex(i)
-                        },
-                        index: j * repeatCount + i,
-                        container: getPublicElement($cell)
-                    }));
-                } else {
-                    $cell.text(text);
+                    if(cellTemplate && cellTemplate.render) {
+                        templateCallbacks.push(cellTemplate.render.bind(cellTemplate, {
+                            model: {
+                                text: text,
+                                date: this._getDateByIndex(i)
+                            },
+                            index: j * repeatCount + i,
+                            container: getPublicElement($cell)
+                        }));
+                    } else {
+                        $cell.text(text);
+                    }
+
+                    $headerRow.append($cell);
+                    $container.append($headerRow);
                 }
-
-                $headerRow.append($cell);
             }
+
+            this._applyCellTemplates(templateCallbacks);
+        } else {
+            $headerRow = $("<tr>").addClass(HEADER_ROW_CLASS);
+
+            for(j = 0; j < repeatCount; j++) {
+                for(i = 0; i < count; i++) {
+                    text = this._getHeaderText(i);
+                    $cell = $("<th>")
+                                .addClass(this._getHeaderPanelCellClass(i))
+                                .attr("title", text);
+
+                    if(cellTemplate && cellTemplate.render) {
+                        templateCallbacks.push(cellTemplate.render.bind(cellTemplate, {
+                            model: {
+                                text: text,
+                                date: this._getDateByIndex(i)
+                            },
+                            index: j * repeatCount + i,
+                            container: getPublicElement($cell)
+                        }));
+                    } else {
+                        $cell.text(text);
+                    }
+
+                    $headerRow.append($cell);
+                }
+            }
+
+            $container.append($headerRow);
+
+            this._applyCellTemplates(templateCallbacks);
+
+            return $headerRow;
         }
-
-        $container.append($headerRow);
-
-        this._applyCellTemplates(templateCallbacks);
-
-        return $headerRow;
     },
 
     _getHeaderPanelCellClass: function(i) {
