@@ -31,6 +31,25 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
         }
     },
 
+    _getCellCoordinatesByIndex: function(index) {
+        var cellIndex,
+            rowIndex;
+
+        if(this.option("rotated")) {
+            rowIndex = Math.floor(index / this._getCellCount());
+            cellIndex = index - this._getCellCount() * rowIndex;
+
+        } else {
+            cellIndex = Math.floor(index / this._getRowCount());
+            rowIndex = index - this._getRowCount() * cellIndex;
+        }
+
+        return {
+            cellIndex: cellIndex,
+            rowIndex: rowIndex
+        };
+    },
+
     _getDateByIndex: function(headerIndex) {
         var resultDate = new Date(this._firstViewDate);
         resultDate.setDate(this._firstViewDate.getDate() + headerIndex);

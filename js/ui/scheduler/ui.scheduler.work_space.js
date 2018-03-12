@@ -633,8 +633,13 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _createWorkSpaceStaticElements: function() {
-        this._dateTableScrollable.$content().append(this._$timePanel, this._$dateTable);
-        this.$element().append(this._$fixedContainer, this._$headerPanel, this._$allDayContainer, this._$allDayPanel, this._dateTableScrollable.$element());
+        if(this.option("rotated")) {
+            this._dateTableScrollable.$content().append(this._$headerPanel, this._$dateTable);
+            this.$element().append(this._$fixedContainer, this._$timePanel, this._$allDayContainer, this._$allDayPanel, this._dateTableScrollable.$element());
+        } else {
+            this._dateTableScrollable.$content().append(this._$timePanel, this._$dateTable);
+            this.$element().append(this._$fixedContainer, this._$headerPanel, this._$allDayContainer, this._$allDayPanel, this._dateTableScrollable.$element());
+        }
     },
 
     _createWorkSpaceScrollableElements: function() {
@@ -1533,14 +1538,8 @@ var SchedulerWorkSpace = Widget.inherit({
         var cellIndex,
             rowIndex;
 
-        // if(this.option("rotated")) {
-        //     rowIndex = Math.floor(index / this._getRowCount());
-        //     cellIndex = index - this._getRowCount() * rowIndex;
-
-        // } else {
         cellIndex = Math.floor(index / this._getRowCount());
         rowIndex = index - this._getRowCount() * cellIndex;
-        // }
 
         return {
             cellIndex: cellIndex,

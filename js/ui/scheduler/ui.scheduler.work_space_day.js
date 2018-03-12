@@ -26,6 +26,21 @@ var SchedulerWorkSpaceDay = SchedulerWorkSpace.inherit({
         }
     },
 
+    _getCellCoordinatesByIndex: function(index) {
+        var cellIndex,
+            rowIndex;
+
+
+        cellIndex = Math.floor(index / this._getRowCount());
+        rowIndex = index - this._getRowCount() * cellIndex;
+
+
+        return {
+            cellIndex: cellIndex,
+            rowIndex: rowIndex
+        };
+    },
+
     _setFirstViewDate: function() {
         this._firstViewDate = this._getViewStartByOptions();
         this._setStartDayHour(this._firstViewDate);
