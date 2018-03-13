@@ -39,7 +39,8 @@ require("ui/switch");
 var DATE_TABLE_CELL_CLASS = "dx-scheduler-date-table-cell",
     APPOINTMENT_CLASS = "dx-scheduler-appointment";
 
-var APPOINTMENT_DEFAULT_OFFSET = 25;
+var APPOINTMENT_DEFAULT_OFFSET = 25,
+    APPOINTMENT_MOBILE_OFFSET = 50;
 
 function getDeltaTz(schedulerTz, date) {
     var defaultTz = date.getTimezoneOffset() * 60000;
@@ -5325,5 +5326,3 @@ QUnit.test("Appointment should be dragged correctly if view Week is rotated", fu
     assert.roughEqual(updatedPosition.top, initialPosition.top - cellHeight, 2, "Top is OK");
     assert.roughEqual(updatedPosition.left, initialPosition.left + cellWidth * 2, 2, "Left is OK");
 });
-
-
