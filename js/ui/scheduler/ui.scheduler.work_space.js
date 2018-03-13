@@ -33,6 +33,7 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     WORKSPACE_WITH_COUNT_CLASS = "dx-scheduler-work-space-count",
     WORKSPACE_WITH_ODD_CELLS_CLASS = "dx-scheduler-work-space-odd-cells",
     WORKSPACE_WITH_OVERLAPPING_CLASS = "dx-scheduler-work-space-overlapping",
+    WORKSPACE_WITH_VERTICAL_DIRECTION_CLASS = "dx-scheduler-work-space-vertical",
 
     WORKSPACE_GROUPED_ATTR = "dx-group-row-count",
 
@@ -381,7 +382,8 @@ var SchedulerWorkSpace = Widget.inherit({
             allowMultipleCellSelection: true,
             indicatorTime: new Date(),
             indicatorUpdateInterval: 5 * toMs("minute"),
-            shadeUntilCurrentTime: true
+            shadeUntilCurrentTime: true,
+            viewDirection: "vertical"
         });
     },
 
@@ -448,6 +450,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._toggleWorkSpaceCountClass();
         this._toggleWorkSpaceWithOddCells();
         this._toggleWorkSpaceOverlappingClass();
+        this._toggleDirectionClass();
 
         this.$element()
             .addClass(COMPONENT_CLASS)
@@ -460,6 +463,9 @@ var SchedulerWorkSpace = Widget.inherit({
         this._createWorkSpaceElements();
     },
 
+    _toggleDirectionClass: function() {
+        this.$element().toggleClass(WORKSPACE_WITH_VERTICAL_DIRECTION_CLASS, this.option("viewDirection") === "vertical");
+    },
     _toggleHorizontalScrollClass: function() {
         this.$element().toggleClass(WORKSPACE_WITH_BOTH_SCROLLS_CLASS, this.option("crossScrollingEnabled"));
     },
@@ -1135,15 +1141,28 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _renderTimePanel: function() {
-        this._renderTableBody({
-            container: getPublicElement(this._$timePanel),
-            rowCount: this._getTimePanelRowCount(),
-            cellCount: 1,
-            cellClass: this._getTimeCellClass.bind(this),
-            rowClass: TIME_PANEL_ROW_CLASS,
-            cellTemplate: this.option("timeCellTemplate"),
-            getCellText: this._getTimeText.bind(this)
-        });
+        if(this.option("viewDirection") === "vertical") {
+            this._renderTableBody({
+                container: getPublicElement(this._$timePanel),
+                rowCount: 1,
+                cellCount: this._getTimePanelRowCount(),
+                cellClass: this._getTimeCellClass.bind(this),
+                rowClass: TIME_PANEL_ROW_CLASS,
+                cellTemplate: this.option("timeCellTemplate"),
+                getCellText: this._getTimeText.bind(this),
+                viewDirection: "vertical"
+            });
+        } else {
+            this._renderTableBody({
+                container: getPublicElement(this._$timePanel),
+                rowCount: this._getTimePanelRowCount(),
+                cellCount: 1,
+                cellClass: this._getTimeCellClass.bind(this),
+                rowClass: TIME_PANEL_ROW_CLASS,
+                cellTemplate: this.option("timeCellTemplate"),
+                getCellText: this._getTimeText.bind(this)
+            });
+        }
     },
 
     _getTimePanelRowCount: function() {
@@ -1165,7 +1184,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _getTimeText: function(i) {
         // T410490: incorrectly displaying time slots on Linux
         var startViewDate = this._getTimeCellDate(i);
-        if(i % 2 === 0) {
+        if(i % 2 === 0 || this.option("viewDirection") === "vertical") {
             return dateLocalization.format(startViewDate, "shorttime");
         }
         return "";
@@ -1182,15 +1201,29 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _renderDateTable: function() {
         var groupCount = this._getGroupCount();
-        this._renderTableBody({
-            container: getPublicElement(this._$dateTable),
-            rowCount: this._getTotalRowCount(groupCount),
-            cellCount: this._getTotalCellCount(groupCount),
-            cellClass: this._getDateTableCellClass.bind(this),
-            rowClass: this._getDateTableRowClass(),
-            cellTemplate: this.option("dataCellTemplate"),
-            getCellData: this._getCellData.bind(this)
-        });
+
+        if(this.option("viewDirection") === "vertical") {
+            this._renderTableBody({
+                container: getPublicElement(this._$dateTable),
+                rowCount: this._getTotalCellCount(groupCount),
+                cellCount: this._getTotalRowCount(groupCount),
+                cellClass: this._getDateTableCellClass.bind(this),
+                rowClass: this._getDateTableRowClass(),
+                cellTemplate: this.option("dataCellTemplate"),
+                getCellData: this._getCellData.bind(this),
+                viewDirection: "vertical"
+            });
+        } else {
+            this._renderTableBody({
+                container: getPublicElement(this._$dateTable),
+                rowCount: this._getTotalRowCount(groupCount),
+                cellCount: this._getTotalCellCount(groupCount),
+                cellClass: this._getDateTableCellClass.bind(this),
+                rowClass: this._getDateTableRowClass(),
+                cellTemplate: this.option("dataCellTemplate"),
+                getCellData: this._getCellData.bind(this)
+            });
+        }
 
         this._attachTablesEvents();
     },
@@ -1469,8 +1502,17 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getCellCoordinatesByIndex: function(index) {
-        var cellIndex = Math.floor(index / this._getRowCount()),
+        var cellIndex,
+            rowIndex;
+
+        if(this.option("viewDirection") === "vertical") {
+            cellIndex = Math.floor(index / this._getCellCount());
+            rowIndex = index - this._getCellCount() * cellIndex;
+
+        } else {
+            cellIndex = Math.floor(index / this._getRowCount());
             rowIndex = index - this._getRowCount() * cellIndex;
+        }
 
         return {
             cellIndex: cellIndex,
@@ -1838,7 +1880,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     getMaxAllowedVerticalPosition: function() {
         if(!this._maxAllowedVerticalPosition) {
-            var rows = this._getRowCount(),
+            var rows = this.option("viewDirection") === "vertical" ? this._getCellCount() : this._getRowCount(),
                 row = this._$dateTable.find("tr:nth-child(" + rows + "n)"),
                 maxPosition = $(row).position().top + $(row).outerHeight();
 

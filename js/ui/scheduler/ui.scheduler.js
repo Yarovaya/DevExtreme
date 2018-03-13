@@ -61,7 +61,7 @@ var WIDGET_CLASS = "dx-scheduler",
 var VIEWS_CONFIG = {
     day: {
         workSpace: SchedulerWorkSpaceDay,
-        renderingStrategy: "vertical"
+        renderingStrategy: "horizontal"
     },
     week: {
         workSpace: SchedulerWorkSpaceWeek,
