@@ -552,22 +552,53 @@ var SchedulerWorkSpace = Widget.inherit({
         this._$fixedContainer = $("<div>").addClass(FIXED_CONTAINER_CLASS);
         this._$allDayContainer = $("<div>").addClass(ALL_DAY_CONTAINER_CLASS);
 
-        this._$allDayTitle = $("<div>")
-            .addClass(ALL_DAY_TITLE_CLASS)
-            .text(messageLocalization.format("dxScheduler-allDay"))
-            .appendTo(this.$element());
+        this._allDayTitles = [];
+        this._allDayTables = [];
+        this._allDayPanels = [];
 
-        this._$allDayTable = $("<table>");
-
-        this._$allDayPanel = $("<div>")
-            .addClass(ALL_DAY_PANEL_CLASS)
-            .append(this._$allDayTable);
+        this._initAllDayPanelElements();
 
         this._$timePanel = $("<table>").addClass(this._getTimePanelClass());
 
         this._$dateTable = $("<table>");
 
         this._$groupTable = $("<table>").addClass(WORKSPACE_HORIZONTAL_GROUP_TABLE_CLASS);
+    },
+
+    _initAllDayPanelElements: function() {
+        if(this._isHorizontalGroupedWorkSpace()) {
+            var groupCount = this._getGroupCount();
+
+            for(var i = 0; i < groupCount; i++) {
+                this._$allDayTitle = $("<div>")
+                    .addClass(ALL_DAY_TITLE_CLASS)
+                    .text(messageLocalization.format("dxScheduler-allDay"));
+
+                this._allDayTitles.push(this._$allDayTitle);
+
+                this._$allDayTable = $("<table>");
+                this._allDayTables.push(this._$allDayTable);
+
+                this._$allDayPanel = $("<div>")
+                    .addClass(ALL_DAY_PANEL_CLASS)
+                    .append(this._$allDayTable);
+
+                this._allDayPanels.push(this._$allDayPanel);
+            }
+        } else {
+            this._$allDayTitle = $("<div>")
+            .addClass(ALL_DAY_TITLE_CLASS)
+            .text(messageLocalization.format("dxScheduler-allDay"))
+            .appendTo(this.$element());
+
+            this._$allDayTable = $("<table>");
+
+            this._$allDayPanel = $("<div>")
+            .addClass(ALL_DAY_PANEL_CLASS)
+            .append(this._$allDayTable);
+
+            this._renderAllDayPanel();
+        }
     },
 
     _initDateTableScrollable: function() {
@@ -637,10 +668,12 @@ var SchedulerWorkSpace = Widget.inherit({
     _createWorkSpaceStaticElements: function() {
         if(this._isHorizontalGroupedWorkSpace()) {
             this._dateTableScrollable.$content().append(this._$groupTable, this._$timePanel, this._$dateTable);
+            this.$element().append(this._$fixedContainer, this._$headerPanel, this._$allDayContainer);
+            this.$element().append(this._$fixedContainer, this._$headerPanel, this._dateTableScrollable.$element());
         } else {
             this._dateTableScrollable.$content().append(this._$timePanel, this._$dateTable);
+            this.$element().append(this._$fixedContainer, this._$headerPanel, this._$allDayContainer, this._$allDayPanel, this._dateTableScrollable.$element());
         }
-        this.$element().append(this._$fixedContainer, this._$headerPanel, this._$allDayContainer, this._$allDayPanel, this._dateTableScrollable.$element());
     },
 
     _createWorkSpaceScrollableElements: function() {
@@ -724,7 +757,16 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _attachTableClasses: function() {
         this._addTableClass(this._$dateTable, this._getDateTableClass());
-        this._addTableClass(this._$allDayTable, ALL_DAY_TABLE_CLASS);
+
+        if(this._isHorizontalGroupedWorkSpace()) {
+            var groupCount = this._getGroupCount();
+
+            for(var i = 0; i < groupCount; i++) {
+                this._addTableClass(this._allDayTables[i], ALL_DAY_TABLE_CLASS);
+            }
+        } else {
+            this._addTableClass(this._$allDayTable, ALL_DAY_TABLE_CLASS);
+        }
     },
 
     _attachHeaderTableClasses: function() {
@@ -836,9 +878,19 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._renderTimePanel();
 
+        if(this._isHorizontalGroupedWorkSpace()) {
+            var groupCount = this._getGroupCount();
+
+            for(var i = 0; i < groupCount; i++) {
+                this._renderAllDayPanel(i);
+            }
+        }
+
         this._renderDateTable();
 
-        this._renderAllDayPanel();
+        if(!this._isHorizontalGroupedWorkSpace()) {
+            this._renderAllDayPanel();
+        }
 
         this._shader = new VerticalShader();
     },
@@ -1133,7 +1185,7 @@ var SchedulerWorkSpace = Widget.inherit({
         return this._getGroupCount() || 1;
     },
 
-    _renderAllDayPanel: function() {
+    _renderAllDayPanel: function(index) {
         var cellCount = this._getCellCount();
 
         if(!this._isHorizontalGroupedWorkSpace()) {
@@ -1141,7 +1193,7 @@ var SchedulerWorkSpace = Widget.inherit({
         }
 
         var cellTemplates = this._renderTableBody({
-            container: getPublicElement(this._$allDayTable),
+            container: this._allDayPanels.length ? getPublicElement(this._allDayTables[index]) : getPublicElement(this._$allDayTable),
             rowCount: 1,
             cellCount: cellCount,
             cellClass: this._getAllDayPanelCellClass.bind(this),
@@ -1219,7 +1271,9 @@ var SchedulerWorkSpace = Widget.inherit({
             cellClass: this._getTimeCellClass.bind(this),
             rowClass: TIME_PANEL_ROW_CLASS,
             cellTemplate: this.option("timeCellTemplate"),
-            getCellText: this._getTimeText.bind(this)
+            getCellText: this._getTimeText.bind(this),
+            groupCount: this._isHorizontalGroupedWorkSpace() ? this._getGroupCount() : undefined,
+            allDayElements: this._isHorizontalGroupedWorkSpace() ? this._allDayTitles : undefined
         });
     },
 
@@ -1279,7 +1333,9 @@ var SchedulerWorkSpace = Widget.inherit({
             cellClass: this._getDateTableCellClass.bind(this),
             rowClass: this._getDateTableRowClass(),
             cellTemplate: this.option("dataCellTemplate"),
-            getCellData: this._getCellData.bind(this)
+            getCellData: this._getCellData.bind(this),
+            allDayElements: this._isHorizontalGroupedWorkSpace() ? this._allDayPanels : undefined,
+            groupCount: this._isHorizontalGroupedWorkSpace() ? groupCount : undefined
         });
 
         this._attachTablesEvents();
