@@ -25,15 +25,60 @@
 </head>
 
 <body>
-    <div id="button"></div>
+    <div id="scheduler"></div>
 
     <script>
         $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
+            $("#scheduler").dxScheduler({
+                dataSource: [{
+                    text: "1",
+                    startDate: new Date(2018, 2, 16, 10),
+                    endDate: new Date(2018, 2, 16, 11),
+                    priorityId: 1
+                }, {
+                    text: "2",
+                    startDate: new Date(2018, 2, 16, 12),
+                    endDate: new Date(2018, 2, 16, 12, 30),
+                    priorityId: 2
+                }],
+                views: ["day", {
+                    type: "week",
+                    name: "week",
+                    grouping: "horizontal"
+                 }, "month", "timelineDay"],
+                currentView: "week",
+                currentDate: new Date(2018, 2, 16),
+                groups: ["priorityId"],
+                resources: [
+                    { 
+                        fieldExpr: "priorityId", 
+                        allowMultiple: false, 
+                        dataSource: priorityData,
+                        label: "Priority"
+                    }
+                ],
+                showAllDayPanel: false,
+                startDayHour: 9,
+                endDayHour: 14,
+                height: 600
             });
         });
+
+        var priorityData = [
+            {
+                text: "Low Priority",
+                id: 1,
+                color: "#1e90ff"
+            }, {
+                text: "High Priority",
+                id: 2,
+                color: "#ff9747"
+            }, {
+                text: "lala Priority",
+                id: 3,
+                color: "#ff9747"
+            }
+        ];
     </script>
 </body>
 </html>
