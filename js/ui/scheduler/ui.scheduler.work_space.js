@@ -1190,11 +1190,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _calculateHeaderCellRepeatCount: function() {
-        if(this._isHorizontalGroupedWorkSpace()) {
-            return 1;
-        }
-
-        return this._getGroupCount() || 1;
+        return this._groupedStrategy.calculateHeaderCellRepeatCount();
     },
 
     _renderAllDayPanel: function(index) {
@@ -1285,7 +1281,7 @@ var SchedulerWorkSpace = Widget.inherit({
             cellTemplate: this.option("timeCellTemplate"),
             getCellText: this._getTimeText.bind(this),
             groupCount: this._isHorizontalGroupedWorkSpace() ? this._getGroupCount() : undefined,
-            allDayElements: this._isHorizontalGroupedWorkSpace() ? this._allDayTitles : undefined
+            allDayElements: this._groupedStrategy.builtAllDayRowsIntoDateTable() ? this._allDayTitles : undefined
         });
     },
 
@@ -1346,15 +1342,11 @@ var SchedulerWorkSpace = Widget.inherit({
             rowClass: this._getDateTableRowClass(),
             cellTemplate: this.option("dataCellTemplate"),
             getCellData: this._getCellData.bind(this),
-            allDayElements: this._builtAllDayRowsIntoDateTable() ? this._allDayPanels : undefined,
+            allDayElements: this._groupedStrategy.builtAllDayRowsIntoDateTable() ? this._allDayPanels : undefined,
             groupCount: this._isHorizontalGroupedWorkSpace() ? groupCount : undefined
         });
 
         this._attachTablesEvents();
-    },
-
-    _builtAllDayRowsIntoDateTable: function() {
-        return this._isHorizontalGroupedWorkSpace() && this.option("showAllDayPanel");
     },
 
     _getTotalCellCount: function(groupCount) {

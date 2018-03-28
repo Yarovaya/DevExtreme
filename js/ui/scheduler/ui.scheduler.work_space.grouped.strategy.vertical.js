@@ -22,6 +22,14 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
     getGroupIndex: function(rowIndex, cellIndex) {
         return Math.floor(rowIndex / this._workSpace._getRowCount());
     },
+
+    calculateHeaderCellRepeatCount: function() {
+        return 1;
+    },
+
+    builtAllDayRowsIntoDateTable: function() {
+        return this._workSpace.option("showAllDayPanel");
+    }
 });
 
 module.exports = VerticalGroupedStrategy;

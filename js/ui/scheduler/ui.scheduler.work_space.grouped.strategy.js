@@ -12,7 +12,8 @@ var GroupedStrategy = Class.inherit({
 
     prepareCellIndexes: abstract,
     calculateCellIndex: abstract,
-    getGroupIndex: abstract
+    getGroupIndex: abstract,
+    builtAllDayRowsIntoDateTable: abstract
 });
 
 
