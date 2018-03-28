@@ -1405,10 +1405,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getGroupIndex: function(rowIndex, cellIndex) {
-        if(this._isHorizontalGroupedWorkSpace()) {
-            return Math.floor(rowIndex / this._getRowCount());
-        }
-        return Math.floor(cellIndex / this._getCellCount());
+        return this._groupedStrategy.getGroupIndex(rowIndex, cellIndex);
     },
 
     _getTableAllDay: function() {
@@ -1580,13 +1577,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _getFormat: abstract,
 
     _calculateCellIndex: function(rowIndex, cellIndex) {
-        if(this._isHorizontalGroupedWorkSpace()) {
-            rowIndex = rowIndex % this._getRowCount();
-        } else {
-            cellIndex = cellIndex % this._getCellCount();
-        }
-
-        return this._getRowCount() * cellIndex + rowIndex;
+        return this._groupedStrategy.calculateCellIndex(rowIndex, cellIndex);
     },
 
     _renderTableBody: function(options, delayCellTemplateRendering) {
@@ -1760,21 +1751,13 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getCellByCoordinates: function(cellCoordinates, groupIndex) {
-        if(this._isHorizontalGroupedWorkSpace()) {
-            var rowIndex = cellCoordinates.rowIndex + groupIndex * this._getRowCount() + this._allDayOffset(groupIndex);
+        var indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
 
-            return this._$dateTable
-                .find("tr")
-                .eq(rowIndex)
-                .find("td")
-                .eq(cellCoordinates.cellIndex);
-        } else {
-            return this._$dateTable
-                .find("tr")
-                .eq(cellCoordinates.rowIndex)
-                .find("td")
-                .eq(cellCoordinates.cellIndex + groupIndex * this._getCellCount());
-        }
+        return this._$dateTable
+            .find("tr")
+            .eq(indexes.rowIndex)
+            .find("td")
+            .eq(indexes.cellIndex);
     },
 
     _allDayOffset: function(groupIndex) {
