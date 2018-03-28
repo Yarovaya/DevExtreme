@@ -19,7 +19,7 @@ var SchedulerTableCreator = {
             allDayElementIndex = 0;
 
         $(options.container).append(tableBody);
-        if(options.groupCount) {
+        if(options.groupCount && options.allDayElements && options.allDayElements.length) {
             row = options.allDayElements[0].find("tr");
             if(!row.length) {
                 row = domAdapter.createElement("tr");

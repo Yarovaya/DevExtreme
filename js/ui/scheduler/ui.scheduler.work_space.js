@@ -566,9 +566,9 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _initAllDayPanelElements: function() {
-        if(this._isHorizontalGroupedWorkSpace()) {
-            var groupCount = this._getGroupCount();
+        var groupCount = this._getGroupCount();
 
+        if(this._isHorizontalGroupedWorkSpace() && groupCount !== 0) {
             for(var i = 0; i < groupCount; i++) {
                 this._$allDayTitle = $("<div>")
                     .addClass(ALL_DAY_TITLE_CLASS)
@@ -1591,7 +1591,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._$dateTable.empty();
         this._shader && this._shader.clean();
         this._$timePanel.empty();
-        this._$allDayTable.empty();
+        this._$allDayTable && this._$allDayTable.empty();
         this._$groupTable.empty();
         delete this._hiddenInterval;
         delete this._interval;
