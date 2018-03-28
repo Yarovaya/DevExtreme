@@ -596,8 +596,6 @@ var SchedulerWorkSpace = Widget.inherit({
             this._$allDayPanel = $("<div>")
             .addClass(ALL_DAY_PANEL_CLASS)
             .append(this._$allDayTable);
-
-            this._renderAllDayPanel();
         }
     },
 
