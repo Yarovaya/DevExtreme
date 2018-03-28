@@ -36,7 +36,7 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     getTotalRowCount: function() {
-        return this._getRowCount();
+        return this._workSpace._getRowCount();
     }
 });
 
