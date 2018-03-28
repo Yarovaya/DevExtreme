@@ -29,7 +29,15 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
 
     builtAllDayRowsIntoDateTable: function() {
         return this._workSpace.option("showAllDayPanel");
-    }
+    },
+
+    getTotalCellCount: function(groupCount) {
+        return this._workSpace._getCellCount();
+    },
+
+    getTotalRowCount: function() {
+        return this._workSpace._getRowCount() * this._workSpace._getGroupCount();
+    },
 });
 
 module.exports = VerticalGroupedStrategy;

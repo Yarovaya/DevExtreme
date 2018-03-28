@@ -27,6 +27,16 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
 
     builtAllDayRowsIntoDateTable: function() {
         return false;
+    },
+
+    getTotalCellCount: function(groupCount) {
+        groupCount = groupCount || 1;
+
+        return this._workSpace._getCellCount() * groupCount;
+    },
+
+    getTotalRowCount: function() {
+        return this._getRowCount();
     }
 });
 

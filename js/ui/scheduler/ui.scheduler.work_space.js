@@ -1350,19 +1350,11 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getTotalCellCount: function(groupCount) {
-        groupCount = groupCount || 1;
-        if(this._isHorizontalGroupedWorkSpace()) {
-            return this._getCellCount();
-        }
-
-        return this._getCellCount() * groupCount;
+        return this._groupedStrategy.getTotalCellCount();
     },
 
     _getTotalRowCount: function() {
-        if(this._isHorizontalGroupedWorkSpace()) {
-            return this._getRowCount() * this._getGroupCount();
-        }
-        return this._getRowCount();
+        return this._groupedStrategy.getTotalRowCount();
     },
 
     _getCellData: function(cell, rowIndex, cellIndex) {

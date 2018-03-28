@@ -13,7 +13,8 @@ var GroupedStrategy = Class.inherit({
     prepareCellIndexes: abstract,
     calculateCellIndex: abstract,
     getGroupIndex: abstract,
-    builtAllDayRowsIntoDateTable: abstract
+    builtAllDayRowsIntoDateTable: abstract,
+    getTotalCellCount: abstract
 });
 
 
