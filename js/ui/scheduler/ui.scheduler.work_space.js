@@ -669,8 +669,8 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _createWorkSpaceStaticElements: function() {
         if(this._isHorizontalGroupedWorkSpace()) {
-            this._dateTableScrollable.$content().append(this._$groupTable, this._$timePanel, this._$dateTable);
-            this.$element().append(this._$fixedContainer, this._$headerPanel, this._$allDayContainer);
+            this._dateTableScrollable.$content().append(this._$allDayContainer, this._$groupTable, this._$timePanel, this._$dateTable);
+            this.$element().append(this._$fixedContainer, this._$headerPanel);
             this.$element().append(this._$fixedContainer, this._$headerPanel, this._dateTableScrollable.$element());
         } else {
             this._dateTableScrollable.$content().append(this._$timePanel, this._$dateTable);
@@ -1752,9 +1752,11 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _getCellByCoordinates: function(cellCoordinates, groupIndex) {
         if(this._isHorizontalGroupedWorkSpace()) {
+            var rowIndex = cellCoordinates.rowIndex + groupIndex * this._getRowCount() + this._allDayOffset(groupIndex);
+
             return this._$dateTable
                 .find("tr")
-                .eq(cellCoordinates.rowIndex + groupIndex * this._getRowCount())
+                .eq(rowIndex)
                 .find("td")
                 .eq(cellCoordinates.cellIndex);
         } else {
@@ -1764,6 +1766,10 @@ var SchedulerWorkSpace = Widget.inherit({
                 .find("td")
                 .eq(cellCoordinates.cellIndex + groupIndex * this._getCellCount());
         }
+    },
+
+    _allDayOffset: function(groupIndex) {
+        return groupIndex;
     },
 
     _getCells: function(allDay) {
