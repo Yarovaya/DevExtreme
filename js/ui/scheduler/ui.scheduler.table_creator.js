@@ -23,7 +23,7 @@ var SchedulerTableCreator = {
             row = options.allDayElements[0].find("tr");
             if(!row.length) {
                 row = domAdapter.createElement("tr");
-                row.append(getPublicElement(options.allDayElements[0].get(0)));
+                row.append(options.allDayElements[0].get(0));
             }
             allDayElementIndex++;
             tableBody.appendChild(row.get ? row.get(0) : row);
@@ -95,12 +95,12 @@ var SchedulerTableCreator = {
                     }
                 }
 
-                if((i + 1) !== 0 && options.groupCount && ((i + 1) % rowCountInGroup === 0)) {
+                if((i + 1) !== 0 && options.allDayElements && options.groupCount && ((i + 1) % rowCountInGroup === 0)) {
                     if(options.allDayElements[allDayElementIndex]) {
                         row = options.allDayElements[allDayElementIndex].find("tr");
                         if(!row.length) {
                             row = domAdapter.createElement("tr");
-                            row.append(getPublicElement(options.allDayElements[allDayElementIndex].get(0)));
+                            row.append(options.allDayElements[allDayElementIndex].get(0));
                         }
                         allDayElementIndex++;
                         tableBody.appendChild(row.get ? row.get(0) : row);

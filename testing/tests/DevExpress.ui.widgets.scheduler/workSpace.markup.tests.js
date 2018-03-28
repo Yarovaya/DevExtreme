@@ -19,6 +19,7 @@ const WORKSPACE_CLASS = "dx-scheduler-work-space",
     HEADER_PANEL_CLASS = "dx-scheduler-header-panel",
     ALL_DAY_PANEL_CLASS = "dx-scheduler-all-day-panel",
     ALL_DAY_TABLE_CELL_CLASS = "dx-scheduler-all-day-table-cell",
+    ALL_DAY_ROW_CLASS = "dx-scheduler-all-day-table-row",
     TIME_PANEL_CLASS = "dx-scheduler-time-panel",
     DATE_TABLE_CLASS = "dx-scheduler-date-table",
     ALL_DAY_TITLE_CLASS = "dx-scheduler-all-day-title",
@@ -504,6 +505,7 @@ const dayWithGroupingModuleConfig = {
         this.instance = $("#scheduler-work-space-grouped").dxSchedulerWorkSpaceDay({
             grouping: "horizontal",
             startDayHour: 8,
+            showAllDayPanel: false,
             endDayHour: 20
         }).dxSchedulerWorkSpaceDay("instance");
         stubInvokeMethod(this.instance);
@@ -517,6 +519,23 @@ QUnit.module("Workspace Day markup with horizontal grouping", dayWithGroupingMod
         const $element = this.instance.$element();
 
         assert.ok($element.hasClass("dx-scheduler-work-space-horizontal-grouped"), "Workspace has 'dx-scheduler-work-space-horizontal-grouped' css class");
+    });
+
+    QUnit.test("Scheduler all day rows should be built into dateTable", (assert) => {
+        this.instance.option("showAllDayPanel", true);
+
+        const $allDayRows = this.instance.$element().find(toSelector(ALL_DAY_ROW_CLASS));
+
+        assert.equal($allDayRows.length, 2, "DateTable contains 2 allDay rows");
+    });
+
+    QUnit.test("Scheduler all day titles should be built into timePanel", (assert) => {
+        this.instance.option("showAllDayPanel", true);
+
+        const $timePanel = this.instance.$element().find(toSelector(TIME_PANEL_CLASS));
+        const $allDayTitles = $timePanel.find(toSelector(ALL_DAY_TITLE_CLASS));
+
+        assert.equal($allDayTitles.length, 2, "TimePanel contains 2 allDay titles");
     });
 
     QUnit.test("Date table should have right group header", (assert) => {

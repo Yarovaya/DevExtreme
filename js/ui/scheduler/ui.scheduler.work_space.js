@@ -390,7 +390,6 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _optionChanged: function(args) {
-
         switch(args.name) {
             case "dateCellTemplate":
             case "resourceCellTemplate":
@@ -404,10 +403,15 @@ var SchedulerWorkSpace = Widget.inherit({
             case "groups":
             case "grouping":
             case "startDate":
+                this._initAllDayPanelElements();
                 this._cleanWorkSpace();
                 break;
             case "showAllDayPanel":
-                this._toggleAllDayVisibility();
+                if(this._isHorizontalGroupedWorkSpace()) {
+                    this._cleanWorkSpace();
+                } else {
+                    this._toggleAllDayVisibility();
+                }
                 break;
             case "allDayExpanded":
                 this._changeAllDayVisibility();
@@ -893,6 +897,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._shader = new VerticalShader();
     },
 
+
     _renderDateTimeIndication: noop,
     _setIndicationUpdateInterval: noop,
     _refreshDateTimeIndication: noop,
@@ -1332,11 +1337,15 @@ var SchedulerWorkSpace = Widget.inherit({
             rowClass: this._getDateTableRowClass(),
             cellTemplate: this.option("dataCellTemplate"),
             getCellData: this._getCellData.bind(this),
-            allDayElements: this._isHorizontalGroupedWorkSpace() ? this._allDayPanels : undefined,
+            allDayElements: this._builtAllDayRowsIntoDateTable() ? this._allDayPanels : undefined,
             groupCount: this._isHorizontalGroupedWorkSpace() ? groupCount : undefined
         });
 
         this._attachTablesEvents();
+    },
+
+    _builtAllDayRowsIntoDateTable: function() {
+        return this._isHorizontalGroupedWorkSpace() && this.option("showAllDayPanel");
     },
 
     _getTotalCellCount: function(groupCount) {
