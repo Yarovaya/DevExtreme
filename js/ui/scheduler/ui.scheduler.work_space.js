@@ -24,12 +24,14 @@ var $ = require("../../core/renderer"),
     contextMenuEvent = require("../../events/contextmenu"),
     dragEvents = require("../../events/drag"),
     Scrollable = require("../scroll_view/ui.scrollable"),
+    HorizontalGroupedStrategy = require("./ui.scheduler.work_space.grouped.strategy.horizontal"),
+    VerticalGroupedStrategy = require("./ui.scheduler.work_space.grouped.strategy.vertical"),
     tableCreator = require("./ui.scheduler.table_creator"),
     VerticalShader = require("./ui.scheduler.currentTimeShader.vertical");
 
 var COMPONENT_CLASS = "dx-scheduler-work-space",
     GROUPED_WORKSPACE_CLASS = "dx-scheduler-work-space-grouped",
-    HORIZONTAL_GROUPED_WORKSPACE_CLASS = "dx-scheduler-work-space-horizontal-grouped",
+    VERTICAL_GROUPED_WORKSPACE_CLASS = "dx-scheduler-work-space-vertical-grouped",
     WORKSPACE_HORIZONTAL_GROUP_TABLE_CLASS = "dx-scheduler-work-space-horizontal-group-table",
 
     WORKSPACE_WITH_BOTH_SCROLLS_CLASS = "dx-scheduler-work-space-both-scrollbar",
@@ -385,7 +387,7 @@ var SchedulerWorkSpace = Widget.inherit({
             indicatorTime: new Date(),
             indicatorUpdateInterval: 5 * toMs("minute"),
             shadeUntilCurrentTime: true,
-            grouping: "vertical"
+            groupOrientation: "horizontal"
         });
     },
 
@@ -401,7 +403,7 @@ var SchedulerWorkSpace = Widget.inherit({
             case "firstDayOfWeek":
             case "currentDate":
             case "groups":
-            case "grouping":
+            case "groupOrientation":
             case "startDate":
                 this._initAllDayPanelElements();
                 this._cleanWorkSpace();
@@ -456,6 +458,8 @@ var SchedulerWorkSpace = Widget.inherit({
     _init: function() {
         this.callBase();
 
+        this._initGroupedStrategy();
+
         this._toggleHorizontalScrollClass();
         this._toggleWorkSpaceCountClass();
         this._toggleWorkSpaceWithOddCells();
@@ -471,6 +475,11 @@ var SchedulerWorkSpace = Widget.inherit({
         this._initDateTableScrollable();
 
         this._createWorkSpaceElements();
+    },
+
+    _initGroupedStrategy: function() {
+        var Strategy = this.option("groupOrientation") === "vertical" ? VerticalGroupedStrategy : HorizontalGroupedStrategy;
+        this._groupedStrategy = new Strategy(this);
     },
 
     _toggleHorizontalScrollClass: function() {
@@ -502,11 +511,11 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _toggleGroupingDirectionClass: function() {
-        this.$element().toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace() && this.option("groups"));
+        this.$element().toggleClass(VERTICAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace() && this.option("groups"));
     },
 
     _isHorizontalGroupedWorkSpace: function() {
-        return this.option("grouping") === "horizontal";
+        return this.option("groupOrientation") === "vertical";
     },
 
     _getTimePanelClass: function() {
@@ -1119,7 +1128,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _makeGroupRows: function(groups) {
-        var tableCreatorStrategy = this.option("grouping") === "horizontal" ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
+        var tableCreatorStrategy = this.option("groupOrientation") === "vertical" ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
         return tableCreator.makeGroupedTable(tableCreatorStrategy,
             groups, {
                 groupRowClass: this._getGroupRowClass(),

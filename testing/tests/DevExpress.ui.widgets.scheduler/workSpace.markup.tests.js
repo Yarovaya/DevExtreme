@@ -503,7 +503,7 @@ QUnit.module("Workspace Day markup", dayModuleConfig, () => {
 const dayWithGroupingModuleConfig = {
     beforeEach: () => {
         this.instance = $("#scheduler-work-space-grouped").dxSchedulerWorkSpaceDay({
-            grouping: "horizontal",
+            groupOrientation: "vertical",
             startDayHour: 8,
             showAllDayPanel: false,
             endDayHour: 20
@@ -518,7 +518,7 @@ QUnit.module("Workspace Day markup with horizontal grouping", dayWithGroupingMod
     QUnit.test("Scheduler workspace day should have a right css class", (assert) => {
         const $element = this.instance.$element();
 
-        assert.ok($element.hasClass("dx-scheduler-work-space-horizontal-grouped"), "Workspace has 'dx-scheduler-work-space-horizontal-grouped' css class");
+        assert.ok($element.hasClass("dx-scheduler-work-space-vertical-grouped"), "Workspace has 'dx-scheduler-work-space-vertical-grouped' css class");
     });
 
     QUnit.test("Scheduler all day rows should be built into dateTable", (assert) => {
@@ -757,7 +757,7 @@ QUnit.module("Workspace Week markup", weekModuleConfig, () => {
 const weekWithGroupingModuleConfig = {
     beforeEach: () => {
         this.instance = $("#scheduler-work-space-grouped").dxSchedulerWorkSpaceWeek({
-            grouping: "horizontal",
+            groupOrientation: "vertical",
             startDayHour: 8,
             endDayHour: 20
         }).dxSchedulerWorkSpaceWeek("instance");
@@ -771,7 +771,7 @@ QUnit.module("Workspace Week markup with horizontal grouping", weekWithGroupingM
     QUnit.test("Scheduler workspace day should have a right css class", (assert) => {
         const $element = this.instance.$element();
 
-        assert.ok($element.hasClass("dx-scheduler-work-space-horizontal-grouped"), "Workspace has 'dx-scheduler-work-space-horizontal-grouped' css class");
+        assert.ok($element.hasClass("dx-scheduler-work-space-vertical-grouped"), "Workspace has 'dx-scheduler-work-space-vertical-grouped' css class");
     });
 
     QUnit.test("Scheduler workspace Week should have a right rows count", (assert) => {
@@ -1240,7 +1240,7 @@ QUnit.module("Workspace Month markup", monthModuleConfig, () => {
 const monthWithGroupingModuleConfig = {
     beforeEach: () => {
         this.instance = $("#scheduler-work-space-grouped").dxSchedulerWorkSpaceMonth({
-            grouping: "horizontal",
+            groupOrientation: "vertical",
             startDayHour: 8,
             endDayHour: 20
         }).dxSchedulerWorkSpaceMonth("instance");
@@ -1254,7 +1254,7 @@ QUnit.module("Workspace Month markup with horizontal grouping", monthWithGroupin
     QUnit.test("Scheduler workspace day should have a right css class", (assert) => {
         const $element = this.instance.$element();
 
-        assert.ok($element.hasClass("dx-scheduler-work-space-horizontal-grouped"), "Workspace has 'dx-scheduler-work-space-horizontal-grouped' css class");
+        assert.ok($element.hasClass("dx-scheduler-work-space-vertical-grouped"), "Workspace has 'dx-scheduler-work-space-vertical-grouped' css class");
     });
 
     QUnit.test("Scheduler workspace month should have correct rows and cells count", (assert) => {
