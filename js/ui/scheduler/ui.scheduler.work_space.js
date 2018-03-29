@@ -1300,7 +1300,9 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getTimeCellClass: function(i) {
-        return TIME_PANEL_CELL_CLASS + " " + VERTICAL_SIZES_CLASS;
+        var cellClass = TIME_PANEL_CELL_CLASS + " " + VERTICAL_SIZES_CLASS;
+
+        return this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, i, i);
     },
 
     _getTimeText: function(i) {
