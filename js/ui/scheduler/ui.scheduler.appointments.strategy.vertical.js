@@ -215,7 +215,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
     _sortCondition: function(a, b) {
         var allDayCondition = a.allDay - b.allDay,
-            condition = this._groupOrientation === "horizontal" ? this._rowCondition(a, b) : this._columnCondition(a, b),
+            condition = this.instance._groupOrientation === "horizontal" ? this._rowCondition(a, b) : this._columnCondition(a, b),
             result = allDayCondition ? allDayCondition : condition;
 
         return this._fixUnstableSorting(result, a, b);
