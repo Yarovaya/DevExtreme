@@ -785,6 +785,7 @@ const weekWithGroupingModuleConfig = {
         this.instance = $("#scheduler-work-space-grouped").dxSchedulerWorkSpaceWeek({
             groupOrientation: "vertical",
             startDayHour: 8,
+            showAllDayPanel: false,
             endDayHour: 20
         }).dxSchedulerWorkSpaceWeek("instance");
         stubInvokeMethod(this.instance);
