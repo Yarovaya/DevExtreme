@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     dataUtils = require("../../core/element_data"),
     dateUtils = require("../../core/utils/date"),
     typeUtils = require("../../core/utils/type"),
+    windowUtils = require("../../core/utils/window"),
     getPublicElement = require("../../core/utils/dom").getPublicElement,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
@@ -890,7 +891,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._renderDateTable();
 
         this._renderAllDayPanel();
-        if(this._isHorizontalGroupedWorkSpace()) {
+        if(this._isHorizontalGroupedWorkSpace() && windowUtils.hasWindow()) {
             this._setHorizontalGroupHeaderCellsHeight();
         }
 
