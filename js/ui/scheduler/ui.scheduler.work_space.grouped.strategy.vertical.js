@@ -38,6 +38,28 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
     getTotalRowCount: function() {
         return this._workSpace._getRowCount() * this._workSpace._getGroupCount();
     },
+
+    addAdditionalGroupCellClasses: function(cellClass, index, i, j) {
+        cellClass = this._addLastGroupCellClass(cellClass, i + 1);
+
+        return this._addFirstGroupCellClass(cellClass, index);
+    },
+
+    _addLastGroupCellClass: function(cellClass, index) {
+        if(index % this._workSpace._getRowCount() === 0) {
+            return cellClass + " " + this.getLastGroupCellClass();
+        }
+
+        return cellClass;
+    },
+
+    _addFirstGroupCellClass: function(cellClass, index) {
+        if((index - 1) % this._workSpace._getCellCount() === 0) {
+            return cellClass + " " + this.getFirstGroupCellClass();
+        }
+
+        return cellClass;
+    }
 });
 
 module.exports = VerticalGroupedStrategy;
