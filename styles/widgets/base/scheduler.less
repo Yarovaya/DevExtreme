@@ -2279,6 +2279,48 @@
                 margin-bottom: 0;
             }
         }
+
+        &.dx-scheduler-timeline-day {
+            .dx-scheduler-sidebar-scrollable {
+                display: none;
+            }
+
+            .dx-scheduler-header-scrollable, 
+            .dx-scheduler-date-table-scrollable {
+                margin-left: 0 !important;
+            }
+
+            .dx-scheduler-group-header-content {
+                height: 40px;
+            }
+            .dx-scheduler-header-panel {
+                .flex-container(row, nowrap);
+            }
+
+            .dx-scheduler-header-row,
+            .dx-scheduler-group-row {
+                .flex-container(row, nowrap);
+            }
+
+            &.dx-scheduler-work-space-grouped .dx-scheduler-group-header {
+                flex-grow: 1;
+                flex-basis: 0;
+
+                border-left: @SCHEDULER_ACCENT_BORDER;
+                .flex-container(row, nowrap);
+            }
+
+            .dx-scheduler-header-row .dx-scheduler-header-panel-cell {
+                border-right: none;  
+            }
+
+            .dx-scheduler-date-table-scrollable {
+                padding-bottom: 90px;
+                margin-bottom: -90px;
+            }
+            
+        }
+
     }
 
     .dx-rtl {

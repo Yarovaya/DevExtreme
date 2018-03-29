@@ -35,6 +35,12 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return this._$focusedCell;
     },
 
+    _getDefaultOptions: function() {
+        return extend(this.callBase(), {
+            groupOrientation: "vertical"
+        });
+    },
+
     _getRightCell: function() {
         var $rightCell,
             $focusedCell = this._$focusedCell,
@@ -76,13 +82,13 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return this._getCellCountInDay() * this.option("intervalCount");
     },
 
-    _getTotalCellCount: function() {
-        return this._getCellCount();
-    },
-
     _getTotalRowCount: function(groupCount) {
-        groupCount = groupCount || 1;
-        return this._getRowCount() * groupCount;
+        if(this._isHorizontalGroupedWorkSpace()) {
+            return this._getRowCount();
+        } else {
+            groupCount = groupCount || 1;
+            return this._getRowCount() * groupCount;
+        }
     },
 
     _getDateByIndex: function(index) {
@@ -153,9 +159,22 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return false;
     },
 
+    _isHorizontalGroupedWorkSpace: function() {
+        return this.option("groupOrientation") === "horizontal";
+    },
+
     _getGroupHeaderContainer: function() {
+        if(this._isHorizontalGroupedWorkSpace()) {
+            return this._$thead;
+        }
         return this._$sidebarTable;
     },
+
+    _builtAllDayRowsIntoDateTable: function() {
+        return false;
+    },
+
+    _initAllDayPanelElements: noop,
 
     _renderView: function() {
         this._setFirstViewDate();
@@ -260,7 +279,10 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     },
 
     _makeGroupRows: function(groups) {
-        return tableCreator.makeGroupedTable(tableCreator.VERTICAL, groups, {
+        var tableCreatorStrategy = this.option("groupOrientation") === "vertical" ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
+
+        return tableCreator.makeGroupedTable(tableCreatorStrategy, groups, {
+            groupRowClass: this._getGroupRowClass(),
             groupHeaderRowClass: this._getGroupRowClass(),
             groupHeaderClass: this._getGroupHeaderClass(),
             groupHeaderContentClass: this._getGroupHeaderContentClass()
@@ -269,6 +291,10 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
 
     _setGroupHeaderCellsHeight: function() {
         if(!windowUtils.hasWindow()) {
+            return;
+        }
+
+        if(this._isHorizontalGroupedWorkSpace()) {
             return;
         }
         var cellHeight = this.getCellHeight() - DATE_TABLE_CELL_BORDER * 2;
@@ -326,10 +352,6 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
 
     _getWorkSpaceWidth: function() {
         return this._$dateTable.outerWidth(true);
-    },
-
-    _calculateHeaderCellRepeatCount: function() {
-        return 1;
     },
 
     _getGroupIndexByCell: function($cell) {

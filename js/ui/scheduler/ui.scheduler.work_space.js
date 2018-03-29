@@ -805,7 +805,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._$headerPanel.width(width);
         this._$dateTable.width(width);
-        this._$allDayTable.width(width);
+        this._$allDayTable && this._$allDayTable.width(width);
 
         this._attachHeaderTableClasses();
 
