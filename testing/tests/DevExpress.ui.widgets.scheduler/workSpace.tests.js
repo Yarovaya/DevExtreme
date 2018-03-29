@@ -419,12 +419,12 @@ QUnit.testStart(function() {
             currentDate: new Date(2018, 2, 16),
             groupOrientation: "vertical",
             startDayHour: 9,
+            showAllDayPanel: false,
             groups: [{
                 name: "one",
                 items: [{ id: 1, text: "a" }, { id: 2, text: "b" }]
             }]
         });
-
         var firstCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
             secondCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(36).data("dxCellData");
 

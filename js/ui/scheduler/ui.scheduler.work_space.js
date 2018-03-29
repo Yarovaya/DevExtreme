@@ -403,8 +403,12 @@ var SchedulerWorkSpace = Widget.inherit({
             case "firstDayOfWeek":
             case "currentDate":
             case "groups":
-            case "groupOrientation":
             case "startDate":
+                this._initAllDayPanelElements();
+                this._cleanWorkSpace();
+                break;
+            case "groupOrientation":
+                this._initGroupedStrategy();
                 this._initAllDayPanelElements();
                 this._cleanWorkSpace();
                 break;
@@ -1342,15 +1346,19 @@ var SchedulerWorkSpace = Widget.inherit({
             rowClass: this._getDateTableRowClass(),
             cellTemplate: this.option("dataCellTemplate"),
             getCellData: this._getCellData.bind(this),
-            allDayElements: this._groupedStrategy.builtAllDayRowsIntoDateTable() ? this._allDayPanels : undefined,
+            allDayElements: this._builtAllDayRowsIntoDateTable() ? this._allDayPanels : undefined,
             groupCount: this._isHorizontalGroupedWorkSpace() ? groupCount : undefined
         });
 
         this._attachTablesEvents();
     },
 
+    _builtAllDayRowsIntoDateTable: function() {
+        return this._groupedStrategy.builtAllDayRowsIntoDateTable();
+    },
+
     _getTotalCellCount: function(groupCount) {
-        return this._groupedStrategy.getTotalCellCount();
+        return this._groupedStrategy.getTotalCellCount(groupCount);
     },
 
     _getTotalRowCount: function() {

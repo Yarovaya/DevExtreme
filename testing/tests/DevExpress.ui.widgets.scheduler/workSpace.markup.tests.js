@@ -1242,6 +1242,7 @@ const monthWithGroupingModuleConfig = {
         this.instance = $("#scheduler-work-space-grouped").dxSchedulerWorkSpaceMonth({
             groupOrientation: "vertical",
             startDayHour: 8,
+            showAllDayPanel: false,
             endDayHour: 20
         }).dxSchedulerWorkSpaceMonth("instance");
         stubInvokeMethod(this.instance);
