@@ -108,6 +108,10 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return "shorttime";
     },
 
+    _needApplyLastGroupCellClass: function() {
+        return false;
+    },
+
     _calculateHiddenInterval: function(rowIndex, cellIndex) {
         var dayIndex = Math.floor(cellIndex / this._getCellCountInDay());
         return dayIndex * this._getHiddenInterval();

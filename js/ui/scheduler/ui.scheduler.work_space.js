@@ -536,9 +536,12 @@ var SchedulerWorkSpace = Widget.inherit({
     _getDateTableCellClass: function(i, j) {
         var cellClass = DATE_TABLE_CELL_CLASS + " " + HORIZONTAL_SIZES_CLASS + " " + VERTICAL_SIZES_CLASS;
 
-        return this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, j + 1, i, j);
+        return this._needApplyLastGroupCellClass() ? this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, j + 1, i, j) : cellClass;
     },
 
+    _needApplyLastGroupCellClass: function() {
+        return true;
+    },
     _getGroupRowClass: function() {
         return GROUP_ROW_CLASS;
     },
