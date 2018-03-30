@@ -645,7 +645,7 @@
             }
         }
 
-        &:not(.dx-scheduler-work-space-vertical-grouped):not(.dx-scheduler-work-space-horizontal-grouped) {
+        &:not(.dx-scheduler-work-space-vertical-grouped) {
             .dx-scheduler-scrollable-offset-mixin(@SCHEDULER_HEADER_PANEL_OFFSET, @SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT, @SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT);
         }
 
@@ -2206,8 +2206,8 @@
             }
 
             .dx-scheduler-date-table-scrollable {
-                padding-bottom: 90px;
-                margin-bottom: -90px;
+                padding-bottom: 90px !important;
+                margin-bottom: -90px !important;
             }
             
         }
