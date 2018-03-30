@@ -13,6 +13,8 @@ var $ = require("../../core/renderer"),
 var TIMELINE_CLASS = "dx-scheduler-timeline",
     GROUP_TABLE_CLASS = "dx-scheduler-group-table",
 
+    HORIZONTAL_GROUPED_WORKSPACE_CLASS = "dx-scheduler-work-space-horizontal-grouped",
+
     TIMELINE_GROUPED_ATTR = "dx-group-column-count";
 
 var HORIZONTAL = "horizontal",
@@ -33,6 +35,10 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         }
 
         return this._$focusedCell;
+    },
+
+    _toggleGroupingDirectionClass: function() {
+        this.$element().toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace() && this.option("groups"));
     },
 
     _getDefaultOptions: function() {
@@ -105,6 +111,12 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     _calculateHiddenInterval: function(rowIndex, cellIndex) {
         var dayIndex = Math.floor(cellIndex / this._getCellCountInDay());
         return dayIndex * this._getHiddenInterval();
+    },
+
+    _getMillisecondsOffset: function(rowIndex, cellIndex) {
+        cellIndex = this._calculateCellIndex(rowIndex, cellIndex);
+
+        return this._getInterval() * cellIndex + this._calculateHiddenInterval(rowIndex, cellIndex);
     },
 
     _createWorkSpaceElements: function() {
@@ -352,21 +364,12 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
             indexes.rowIndex = cellCoordinates.rowIndex + groupIndex;
             indexes.cellIndex = cellCoordinates.cellIndex;
         }
-        //var indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
 
         return this._$dateTable
             .find("tr")
             .eq(indexes.rowIndex)
             .find("td")
             .eq(indexes.cellIndex);
-    },
-
-    _calculateCellIndex: function(rowIndex, cellIndex) {
-        return cellIndex;
-    },
-
-    _getGroupIndex: function(rowIndex) {
-        return rowIndex;
     },
 
     _getWorkSpaceWidth: function() {
