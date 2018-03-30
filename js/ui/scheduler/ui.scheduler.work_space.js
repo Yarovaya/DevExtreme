@@ -1862,10 +1862,18 @@ var SchedulerWorkSpace = Widget.inherit({
             left: position.left + shift.left,
             rowIndex: position.rowIndex,
             cellIndex: position.cellIndex,
-            hMax: this._isHorizontalGroupedWorkSpace() ? this.getMaxAllowedPosition()[0] : this.getMaxAllowedPosition()[groupIndex],
-            vMax: this._isHorizontalGroupedWorkSpace() ? this.getMaxAllowedVerticalPosition()[groupIndex] : this.getMaxAllowedVerticalPosition()[0],
+            hMax: this._getHorizontalMax(groupIndex),
+            vMax: this._getVerticalMax(groupIndex),
             groupIndex: groupIndex
         };
+    },
+
+    _getHorizontalMax: function(groupIndex) {
+        return this._isHorizontalGroupedWorkSpace() ? this.getMaxAllowedPosition()[0] : this.getMaxAllowedPosition()[groupIndex];
+    },
+
+    _getVerticalMax: function(groupIndex) {
+        return this._isHorizontalGroupedWorkSpace() ? this.getMaxAllowedVerticalPosition()[groupIndex] : this.getMaxAllowedVerticalPosition()[0];
     },
 
     getCellIndexByDate: function(date, inAllDayRow) {

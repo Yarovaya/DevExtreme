@@ -334,12 +334,22 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         };
     },
 
+    _getHorizontalMax: function(groupIndex) {
+        return this._isHorizontalGroupedWorkSpace() ? this.getMaxAllowedPosition()[groupIndex] : this.getMaxAllowedPosition()[0];
+    },
+
+    _getVerticalMax: function(groupIndex) {
+        return this._isHorizontalGroupedWorkSpace() ? this.getMaxAllowedVerticalPosition()[0] : this.getMaxAllowedVerticalPosition()[groupIndex];
+    },
+
     _getCellByCoordinates: function(cellCoordinates, groupIndex) {
+        var indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
+
         return this._$dateTable
             .find("tr")
-            .eq(cellCoordinates.rowIndex + groupIndex)
+            .eq(indexes.rowIndex)
             .find("td")
-            .eq(cellCoordinates.cellIndex);
+            .eq(indexes.cellIndex);
     },
 
     _calculateCellIndex: function(rowIndex, cellIndex) {
