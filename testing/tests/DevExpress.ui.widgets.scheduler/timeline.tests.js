@@ -340,7 +340,8 @@ QUnit.test("the 'getCoordinatesByDate' method should return right coordinates fo
 
 QUnit.test("the 'getCoordinatesByDate' method should return right coordinates for grouped timeline", function(assert) {
     var instance = $("#scheduler-timeline").dxSchedulerTimelineDay({
-        "currentDate": new Date(2015, 9, 28)
+        "currentDate": new Date(2015, 9, 28),
+        groupOrientation: "vertical"
     }).dxSchedulerTimelineDay("instance");
 
     stubInvokeMethod(instance);
@@ -349,7 +350,6 @@ QUnit.test("the 'getCoordinatesByDate' method should return right coordinates fo
             { name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }] },
             { name: "two", items: [{ id: 1, text: "1" }, { id: 2, text: "2" }] }
         ]);
-
         var coordinates = instance.getCoordinatesByDate(new Date(2015, 9, 28, 1), 1);
         var expectedPosition = instance.$element()
             .find(".dx-scheduler-date-table-row").eq(1)

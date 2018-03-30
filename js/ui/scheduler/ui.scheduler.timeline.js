@@ -343,7 +343,16 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     },
 
     _getCellByCoordinates: function(cellCoordinates, groupIndex) {
-        var indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
+        var indexes = {};
+
+        if(this._isHorizontalGroupedWorkSpace()) {
+            indexes.rowIndex = cellCoordinates.rowIndex;
+            indexes.cellIndex = cellCoordinates.cellIndex + groupIndex * this._getCellCount();
+        } else {
+            indexes.rowIndex = cellCoordinates.rowIndex + groupIndex;
+            indexes.cellIndex = cellCoordinates.cellIndex;
+        }
+        //var indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
 
         return this._$dateTable
             .find("tr")
