@@ -24,7 +24,9 @@ var GroupedStrategy = Class.inherit({
     getGroupIndex: abstract,
     builtAllDayRowsIntoDateTable: abstract,
     getTotalCellCount: abstract,
-    addAdditionalGroupCellClasses: abstract
+    addAdditionalGroupCellClasses: abstract,
+    getHorizontalMax: abstract,
+    getVerticalMax: abstract
 });
 
 

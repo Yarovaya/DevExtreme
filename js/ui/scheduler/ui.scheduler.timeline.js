@@ -350,14 +350,6 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         };
     },
 
-    _getHorizontalMax: function(groupIndex) {
-        return this._isHorizontalGroupedWorkSpace() ? this.getMaxAllowedPosition()[groupIndex] : this.getMaxAllowedPosition()[0];
-    },
-
-    _getVerticalMax: function(groupIndex) {
-        return this._isHorizontalGroupedWorkSpace() ? this.getMaxAllowedVerticalPosition()[0] : this.getMaxAllowedVerticalPosition()[groupIndex];
-    },
-
     _getCellByCoordinates: function(cellCoordinates, groupIndex) {
         var indexes = {};
 

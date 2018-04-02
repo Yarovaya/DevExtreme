@@ -63,7 +63,15 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
         }
 
         return cellClass;
-    }
+    },
+
+    getHorizontalMax: function(groupIndex) {
+        return this._workSpace.getMaxAllowedPosition()[0];
+    },
+
+    getVerticalMax: function(groupIndex) {
+        return this._workSpace.getMaxAllowedVerticalPosition()[groupIndex];
+    },
 });
 
 module.exports = VerticalGroupedStrategy;
