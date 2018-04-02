@@ -412,7 +412,7 @@ var SchedulerWorkSpace = Widget.inherit({
                 this._cleanWorkSpace();
                 break;
             case "showAllDayPanel":
-                if(this._isHorizontalGroupedWorkSpace()) {
+                if(this._isVerticalGroupedWorkSpace()) {
                     this._cleanWorkSpace();
                 } else {
                     this._toggleAllDayVisibility();
@@ -514,10 +514,10 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _toggleGroupingDirectionClass: function() {
-        this.$element().toggleClass(VERTICAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace() && this.option("groups"));
+        this.$element().toggleClass(VERTICAL_GROUPED_WORKSPACE_CLASS, this._isVerticalGroupedWorkSpace() && this.option("groups"));
     },
 
-    _isHorizontalGroupedWorkSpace: function() {
+    _isVerticalGroupedWorkSpace: function() {
         return this.option("groupOrientation") === "vertical";
     },
 
@@ -579,7 +579,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _initAllDayPanelElements: function() {
         var groupCount = this._getGroupCount();
 
-        if(this._isHorizontalGroupedWorkSpace() && groupCount !== 0) {
+        if(this._isVerticalGroupedWorkSpace() && groupCount !== 0) {
             for(var i = 0; i < groupCount; i++) {
                 this._$allDayTitle = $("<div>")
                     .addClass(ALL_DAY_TITLE_CLASS)
@@ -675,7 +675,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _createWorkSpaceStaticElements: function() {
-        if(this._isHorizontalGroupedWorkSpace()) {
+        if(this._isVerticalGroupedWorkSpace()) {
             this._dateTableScrollable.$content().append(this._$allDayContainer, this._$groupTable, this._$timePanel, this._$dateTable);
             this.$element().append(this._$fixedContainer, this._$headerPanel);
             this.$element().append(this._$fixedContainer, this._$headerPanel, this._dateTableScrollable.$element());
@@ -755,7 +755,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _visibilityChanged: function(visible) {
-        if(visible && this._isHorizontalGroupedWorkSpace()) {
+        if(visible && this._isVerticalGroupedWorkSpace()) {
             this._setHorizontalGroupHeaderCellsHeight();
         }
 
@@ -767,7 +767,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _attachTableClasses: function() {
         this._addTableClass(this._$dateTable, this._getDateTableClass());
 
-        if(this._isHorizontalGroupedWorkSpace()) {
+        if(this._isVerticalGroupedWorkSpace()) {
             var groupCount = this._getGroupCount();
 
             for(var i = 0; i < groupCount; i++) {
@@ -813,7 +813,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._attachHeaderTableClasses();
 
-        if(this._isHorizontalGroupedWorkSpace()) {
+        if(this._isVerticalGroupedWorkSpace()) {
             this._setHorizontalGroupHeaderCellsHeight();
         }
     },
@@ -883,7 +883,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._renderTimePanel();
 
-        if(this._isHorizontalGroupedWorkSpace()) {
+        if(this._isVerticalGroupedWorkSpace()) {
             var groupCount = this._getGroupCount();
 
             for(var i = 0; i < groupCount; i++) {
@@ -895,7 +895,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._renderDateTable();
 
-        if(this._isHorizontalGroupedWorkSpace() && windowUtils.hasWindow()) {
+        if(this._isVerticalGroupedWorkSpace() && windowUtils.hasWindow()) {
             this._setHorizontalGroupHeaderCellsHeight();
         }
 
@@ -1057,7 +1057,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getGroupHeaderContainer: function() {
-        if(this._isHorizontalGroupedWorkSpace()) {
+        if(this._isVerticalGroupedWorkSpace()) {
             return this._$groupTable;
         }
 
@@ -1192,7 +1192,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _renderAllDayPanel: function(index) {
         var cellCount = this._getCellCount();
 
-        if(!this._isHorizontalGroupedWorkSpace()) {
+        if(!this._isVerticalGroupedWorkSpace()) {
             cellCount *= (this._getGroupCount() || 1);
         }
 
