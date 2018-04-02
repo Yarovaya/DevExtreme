@@ -7,7 +7,7 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
     prepareCellIndexes: function(cellCoordinates, groupIndex) {
         var rowIndex = cellCoordinates.rowIndex + groupIndex * this._workSpace._getRowCount();
 
-        if(this._workSpace.supportAllDayRow()) {
+        if(this._workSpace.supportAllDayRow() && this._workSpace.option("showAllDayPanel")) {
             rowIndex += groupIndex;
         }
 
