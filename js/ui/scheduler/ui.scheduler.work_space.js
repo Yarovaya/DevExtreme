@@ -891,9 +891,10 @@ var SchedulerWorkSpace = Widget.inherit({
             }
         }
 
+        this._renderAllDayPanel();
+
         this._renderDateTable();
 
-        this._renderAllDayPanel();
         if(this._isHorizontalGroupedWorkSpace() && windowUtils.hasWindow()) {
             this._setHorizontalGroupHeaderCellsHeight();
         }
@@ -1275,7 +1276,7 @@ var SchedulerWorkSpace = Widget.inherit({
             rowClass: TIME_PANEL_ROW_CLASS,
             cellTemplate: this.option("timeCellTemplate"),
             getCellText: this._getTimeText.bind(this),
-            groupCount: this._isHorizontalGroupedWorkSpace() ? this._getGroupCount() : undefined,
+            groupCount: this._getGroupCount(),
             allDayElements: this._groupedStrategy.builtAllDayRowsIntoDateTable() ? this._allDayTitles : undefined
         });
     },
@@ -1332,7 +1333,7 @@ var SchedulerWorkSpace = Widget.inherit({
             cellTemplate: this.option("dataCellTemplate"),
             getCellData: this._getCellData.bind(this),
             allDayElements: this._builtAllDayRowsIntoDateTable() ? this._allDayPanels : undefined,
-            groupCount: this._isHorizontalGroupedWorkSpace() ? groupCount : undefined
+            groupCount: groupCount
         });
 
         this._attachTablesEvents();
