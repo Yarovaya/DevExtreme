@@ -67,6 +67,10 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
     getVerticalMax: function(groupIndex) {
         return this._workSpace.getMaxAllowedVerticalPosition()[0];
     },
+
+    calculateTimeCellRepeatCount: function() {
+        return 1;
+    }
 });
 
 module.exports = HorizontalGroupedStrategy;

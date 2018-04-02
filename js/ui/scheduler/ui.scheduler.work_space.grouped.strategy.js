@@ -26,7 +26,8 @@ var GroupedStrategy = Class.inherit({
     getTotalCellCount: abstract,
     addAdditionalGroupCellClasses: abstract,
     getHorizontalMax: abstract,
-    getVerticalMax: abstract
+    getVerticalMax: abstract,
+    calculateTimeCellRepeatCount: abstract
 });
 
 

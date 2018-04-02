@@ -1265,7 +1265,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _renderTimePanel: function() {
-        var repeatCount = this._calculateTimeCellRepeatCount();
+        var repeatCount = this._groupedStrategy.calculateTimeCellRepeatCount();
 
         this._renderTableBody({
             container: getPublicElement(this._$timePanel),
@@ -1278,14 +1278,6 @@ var SchedulerWorkSpace = Widget.inherit({
             groupCount: this._isHorizontalGroupedWorkSpace() ? this._getGroupCount() : undefined,
             allDayElements: this._groupedStrategy.builtAllDayRowsIntoDateTable() ? this._allDayTitles : undefined
         });
-    },
-
-    _calculateTimeCellRepeatCount: function() {
-        if(this._isHorizontalGroupedWorkSpace()) {
-            return this._getGroupCount() || 1;
-        }
-
-        return 1;
     },
 
     _getTimePanelRowCount: function() {
