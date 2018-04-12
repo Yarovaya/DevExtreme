@@ -113,6 +113,10 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
             top: 0,
             bottom: 0
         };
+    },
+
+    getScrollableScrollTop: function(allDay) {
+        return !allDay ? this._workSpace.getScrollable().scrollTop() : 0;
     }
 });
 

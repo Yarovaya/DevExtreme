@@ -135,6 +135,10 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
             top: topOffset,
             bottom: bottomOffset
         };
+    },
+
+    getScrollableScrollTop: function(allDay) {
+        return this._workSpace.getScrollable().scrollTop();
     }
 });
 

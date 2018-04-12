@@ -31,7 +31,9 @@ var GroupedStrategy = Class.inherit({
     getWorkSpaceMinWidth: abstract,
     getAllDayHeight: abstract,
     getGroupCountAttr: abstract,
-    getLeftOffset: abstract
+    getLeftOffset: abstract,
+    getScrollableScrollTop: abstract
+
 });
 
 
