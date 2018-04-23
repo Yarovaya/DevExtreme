@@ -65,9 +65,11 @@ function getScrollBarWidth() {
         height: 200
     }).appendTo(container);
 
+    var result = container.width() - content.width();
+
     container.remove();
 
-    return container.width() - content.width();
+    return result;
 }
 
 var moduleConfig = {
