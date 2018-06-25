@@ -19,7 +19,6 @@ QUnit.testStart(() => {
 
 var DRAWER_CLASS = "dx-drawer",
     DRAWER_WRAPPER_CLASS = "dx-drawer-wrapper",
-    DRAWER_CONTENT_CLASS = "dx-drawer-content",
     // DRAWER_SCHADER_CLASS = "dx-drawer-shader",
     // DRAWER_BUTTON_CLASS = "dx-drawer-button",
     DRAWER_BUTTON_ID = "dx-drawer-navigation",
@@ -38,14 +37,6 @@ QUnit.module("Drawer markup", () => {
             $wrapper = $element.find("." + DRAWER_WRAPPER_CLASS);
 
         assert.ok($wrapper.length, "Wrapper is rendered");
-    });
-
-    QUnit.test("drawer should have a content", (assert) => {
-        let $element = $("#drawer").dxDrawer(),
-            $wrapper = $element.find("." + DRAWER_WRAPPER_CLASS),
-            $content = $wrapper.find("." + DRAWER_CONTENT_CLASS);
-
-        assert.ok($content.length, "Content is rendered");
     });
 
     QUnit.test("drawer should have a checkBox", (assert) => {
