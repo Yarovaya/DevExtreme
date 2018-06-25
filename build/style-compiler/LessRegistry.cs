@@ -145,6 +145,7 @@ namespace StyleCompiler
                 "textEditor",
                 "textBox",
                 "dropDownEditor",
+                "drawer",
                 "list",
                 "dropDownList",
                 "textArea",

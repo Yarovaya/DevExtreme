@@ -26,6 +26,7 @@ ui.dxCheckBox = require("../../../ui/check_box");
 ui.dxColorBox = require("../../../ui/color_box");
 ui.dxDateBox = require("../../../ui/date_box");
 ui.dxDeferRendering = require("../../../ui/defer_rendering");
+ui.dxDrawer = require("../../../ui/drawer");
 ui.dxDropDownBox = require("../../../ui/drop_down_box");
 ui.dxDropDownMenu = require("../../../ui/drop_down_menu");
 ui.dxFileUploader = require("../../../ui/file_uploader");
