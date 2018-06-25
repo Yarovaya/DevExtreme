@@ -88,6 +88,16 @@ var Drawer = Widget.inherit({
 
     _renderShader: function() {
         this._$shader = $("<div>").addClass(DRAWER_SCHADER_CLASS).appendTo(this._$wrapper);
+    },
+
+    _optionChanged: function(args) {
+        switch(args.name) {
+            case "contentTemplate":
+                this._invalidate();
+                break;
+            default:
+                this.callBase(args);
+        }
     }
 });
 
