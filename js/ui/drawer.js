@@ -11,6 +11,7 @@ var DRAWER_CLASS = "dx-drawer",
     DRAWER_CONTENT_CLASS = "dx-drawer-content",
     DRAWER_SCHADER_CLASS = "dx-drawer-shader",
     DRAWER_BUTTON_CLASS = "dx-drawer-button",
+    DRAWER_TITLE_CLASS = "dx-drawer-title",
     DRAWER_NAVIGATION_ID = "dx-drawer-navigation",
     DRAWER_CHECKBOX_CLASS = "dx-drawer-checkbox";
 
@@ -24,15 +25,29 @@ var Drawer = Widget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
+            /**
+            * @name dxDrawerOptions.title
+            * @type string
+            * @default ""
+            */
+            title: "",
+
+            /**
+            * @name dxDrawerOptions.showTitle
+            * @type boolean
+            * @default true
+            */
+            showTitle: true,
+
              /**
-            * @name dxDrawer.showMode
+            * @name dxDrawerOptions.showMode
             * @type string
             * @default "temporary"
             */
             showMode: "temporary",
 
             /**
-            * @name dxDrawer.contentTemplate
+            * @name dxDrawerOptions.contentTemplate
             * @type template|function
             * @default "content"
             * @type_function_param1 contentElement:dxElement
@@ -56,6 +71,7 @@ var Drawer = Widget.inherit({
         this._renderWrapper();
         this._renderCheckBox();
         this._renderButton();
+        this._renderTitle();
         this._renderShader();
 
         this.setAria("role", "drawer");
@@ -103,6 +119,22 @@ var Drawer = Widget.inherit({
             .appendTo(this._$wrapper);
     },
 
+    _renderTitle: function() {
+        var titleText = this.option("title"),
+            showTitle = this.option("showTitle");
+
+
+        if(showTitle && !!titleText) {
+            this._$title && this._$title.remove();
+            this._$title = $("<div>").addClass(DRAWER_TITLE_CLASS).insertBefore(this._$wrapper);
+            this._$title.text(titleText);
+            // this._$title = this._renderTemplateByType("titleTemplate", items, $title).addClass(POPUP_TITLE_CLASS);
+            // this._executeTitleRenderAction(this._$title);
+        } else if(this._$title) {
+            this._$title.detach();
+        }
+    },
+
     _renderShader: function() {
         this._$shader = $("<div>").addClass(DRAWER_SCHADER_CLASS).appendTo(this._$wrapper);
     },
@@ -111,6 +143,11 @@ var Drawer = Widget.inherit({
         switch(args.name) {
             case "contentTemplate":
                 this._invalidate();
+                break;
+            case "showTitle":
+            case "title":
+            case "titleTemplate":
+                this._renderTitle();
                 break;
             case "showMode":
                 this._refreshModeClass(args.previousValue);
