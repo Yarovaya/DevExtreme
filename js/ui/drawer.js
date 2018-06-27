@@ -24,6 +24,13 @@ var Drawer = Widget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
+             /**
+            * @name dxDrawer.showMode
+            * @type string
+            * @default "temporary"
+            */
+            showMode: "temporary",
+
             /**
             * @name dxDrawer.contentTemplate
             * @type template|function
@@ -43,12 +50,22 @@ var Drawer = Widget.inherit({
 
     _initMarkup: function() {
         this.callBase();
+
+        this._refreshModeClass();
+
         this._renderWrapper();
         this._renderCheckBox();
         this._renderButton();
         this._renderShader();
 
         this.setAria("role", "drawer");
+    },
+
+    _refreshModeClass: function(prevClass) {
+        prevClass && this.$element()
+            .removeClass(DRAWER_CLASS + "-" + prevClass);
+
+        this.$element().addClass(DRAWER_CLASS + "-" + this.option("showMode"));
     },
 
     _renderWrapper: function() {
@@ -94,6 +111,9 @@ var Drawer = Widget.inherit({
         switch(args.name) {
             case "contentTemplate":
                 this._invalidate();
+                break;
+            case "showMode":
+                this._refreshModeClass(args.previousValue);
                 break;
             default:
                 this.callBase(args);

@@ -17,7 +17,8 @@ QUnit.testStart(() => {
     $("#qunit-fixture").html(markup);
 });
 
-var DRAWER_WRAPPER_CLASS = "dx-drawer-wrapper",
+var DRAWER_CLASS = "dx-drawer",
+    DRAWER_WRAPPER_CLASS = "dx-drawer-wrapper",
     DRAWER_CONTENT_CLASS = "dx-drawer-content";
     // DRAWER_SCHADER_CLASS = "dx-drawer-shader",
     // DRAWER_BUTTON_CLASS = "dx-drawer-button",
@@ -32,6 +33,22 @@ QUnit.module("Drawer", () => {
             $content = $wrapper.find("." + DRAWER_CONTENT_CLASS);
 
         assert.ok($content.length, "Content is rendered");
+    });
+});
+
+QUnit.module("Option changing", () => {
+    QUnit.test("drawer should have correct mode class", (assert) => {
+        let $element = $("#drawer").dxDrawer({
+                showMode: "persistent"
+            }),
+            element = $element.dxDrawer("instance");
+
+        assert.ok($element.hasClass(DRAWER_CLASS + "-persistent"), "Mode class is correct");
+
+        element.option("showMode", "temporary");
+
+        assert.notOk($element.hasClass(DRAWER_CLASS + "-persistent"), "Mode class is correct");
+        assert.ok($element.hasClass(DRAWER_CLASS + "-temporary"), "Mode class is correct");
     });
 });
 
