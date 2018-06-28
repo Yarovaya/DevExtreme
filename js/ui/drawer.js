@@ -8,7 +8,7 @@ var $ = require("../core/renderer"),
 
 var DRAWER_CLASS = "dx-drawer",
     DRAWER_WRAPPER_CLASS = "dx-drawer-wrapper",
-    // DRAWER_BUTTON_WRAPPER_CLASS = "dx-drawer-button-wrapper",
+    DRAWER_BUTTON_WRAPPER_CLASS = "dx-drawer-button-wrapper",
     DRAWER_CONTENT_CLASS = "dx-drawer-content",
     DRAWER_SCHADER_CLASS = "dx-drawer-shader",
     DRAWER_BUTTON_CLASS = "dx-drawer-button",
@@ -73,7 +73,7 @@ var Drawer = Widget.inherit({
 
         this._renderCheckBox();
 
-        // this._renderButtonWrapper();
+        this._renderButtonWrapper();
         this._renderButton();
         this._renderTitle();
         this._renderShader();
@@ -93,11 +93,11 @@ var Drawer = Widget.inherit({
         this.$element().append(this._$wrapper);
     },
 
-    // _renderButtonWrapper: function() {
-    //     this._$buttonWrapper = $("<div>")
-    //     .addClass(DRAWER_BUTTON_WRAPPER_CLASS)
-    //     .appendTo(this._$wrapper);
-    // },
+    _renderButtonWrapper: function() {
+        this._$buttonWrapper = $("<div>")
+        .addClass(DRAWER_BUTTON_WRAPPER_CLASS)
+        .appendTo(this._$wrapper);
+    },
 
     _renderContentImpl: function() {
         this._$content = $("<div>").addClass(DRAWER_CONTENT_CLASS).appendTo(this._$wrapper);
@@ -113,7 +113,7 @@ var Drawer = Widget.inherit({
         this._$button = $("<label>")
         .addClass(DRAWER_BUTTON_CLASS)
         .attr("for", DRAWER_NAVIGATION_ID)
-        .appendTo(this._$wrapper);
+        .appendTo(this._$buttonWrapper);
 
         this._$icon = $("<div>")
             .addClass("dx-icon dx-icon-menu")
@@ -138,7 +138,7 @@ var Drawer = Widget.inherit({
             this._$title && this._$title.remove();
             this._$title = $("<div>")
                 .addClass(DRAWER_TITLE_CLASS)
-                .appendTo(this._$wrapper);
+                .appendTo(this._$buttonWrapper);
 
             this._$title.text(titleText);
             // this._$title = this._renderTemplateByType("titleTemplate", items, $title).addClass(POPUP_TITLE_CLASS);

@@ -16,8 +16,8 @@
         margin-left: 0; 
     }
 
-    input[type="checkbox"]:checked ~ .dx-drawer-title {
-        margin-left: @DRAWER_BUTTON_SIZE; 
+    input[type="checkbox"]:checked ~ .dx-drawer-button-wrapper .dx-drawer-title {
+        margin-left: @DRAWER_BUTTON_SIZE + 10px; 
     }
 
     input[type="checkbox"]:checked ~ .dx-drawer-button {
@@ -34,7 +34,9 @@
 }
 
 .dx-drawer-title {
-    margin-left: -@DRAWER_BUTTON_SIZE
+    height: @DRAWER_BUTTON_SIZE;
+    margin-left: -@DRAWER_BUTTON_SIZE;
+    padding-right: 20px;
 }
 
 .dx-drawer-content {
