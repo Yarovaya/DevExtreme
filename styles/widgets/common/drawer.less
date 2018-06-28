@@ -1,0 +1,83 @@
+@DRAWER_BUTTON_SIZE: 60px;
+@DRAWER_WIDTH: 240px;
+
+.dx-drawer-wrapper {
+    width: @DRAWER_WIDTH;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    margin-right: auto;
+
+    input[type="checkbox"] {
+        display: none;
+    }
+
+    input[type="checkbox"]:checked ~ .dx-drawer-content {
+        margin-left: 0; 
+    }
+
+    input[type="checkbox"]:checked ~ .dx-drawer-title {
+        margin-left: @DRAWER_BUTTON_SIZE; 
+    }
+
+    input[type="checkbox"]:checked ~ .dx-drawer-button {
+        // left: 260px;
+    }
+
+    input[type="checkbox"]:checked ~ .dx-drawer-shader {
+        visibility: visible;
+        pointer-events: auto;
+        opacity: 0.5;
+        background: #111;
+        z-index: 1;
+    }
+}
+
+.dx-drawer-title {
+    margin-left: -@DRAWER_BUTTON_SIZE
+}
+
+.dx-drawer-content {
+    top: @DRAWER_BUTTON_SIZE + 10px;
+    position: fixed;
+    width: 250px;
+    height: 100%;
+    -moz-transition: all 200ms ease-in;
+    -webkit-transition: all 200ms ease-in;
+    -o-transition: all 200ms ease-in;
+    transition: all 200ms ease-in;
+    z-index: 2;
+    left: 0;
+    margin: 0 0 0 -250px;
+}
+
+.dx-drawer-button {
+    padding-top: 18px;
+    display: block;
+    font-weight: 700;
+    width: @DRAWER_BUTTON_SIZE;
+    height: @DRAWER_BUTTON_SIZE;
+    color: #fff;
+    text-align: center;
+    position: fixed;
+    z-index: 2;
+    -moz-transition: all 200ms ease-in;
+    -webkit-transition: all 200ms ease-in;
+    -o-transition: all 200ms ease-in;
+    transition: all 200ms ease-in;
+}
+
+.dx-drawer-shader {
+    visibility: hidden;
+    -moz-transition: all 200ms ease-in;
+    -webkit-transition: all 200ms ease-in;
+    -o-transition: all 200ms ease-in;
+    transition: all 200ms ease-in;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 4;
+    transition-duration: .5s;
+}

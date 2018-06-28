@@ -1,77 +1,14 @@
+
+.dx-drawer-button,
+.dx-drawer-title {
+    background-color: @DRAWER_BUTTON_BACKGROUND_COLOR;
+    color: @DRAWER_BUTTON_COLOR;
+}
+
 .dx-drawer-wrapper {
-    overflow: hidden;
-    top: 0;
-    left: 0;
-    margin-right: auto;
-
-    input[type="checkbox"] {
-        display: none;
-    }
-
-    input[type="checkbox"]:checked ~ .dx-drawer-content {
-        margin-left: 0; 
-    }
-
-    input[type="checkbox"]:checked ~ .dx-drawer-button {
-        left: 260px;
-    }
-
     input[type="checkbox"]:checked ~ .dx-drawer-shader {
-        visibility: visible;
-        pointer-events: auto;
+        background: @DRAWER_SHADER_COLOR;
         opacity: 0.5;
-        background: #111;
-        z-index: 1;
     }
 }
 
-.dx-drawer-content {
-    position: fixed;
-    width: 250px;
-    height: 100%;
-    -moz-transition: all 200ms ease-in;
-    -webkit-transition: all 200ms ease-in;
-    -o-transition: all 200ms ease-in;
-    transition: all 200ms ease-in;
-    z-index: 2;
-    top: 0;
-    left: 0;
-    margin: 0 0 0 -250px;
-}
-
-.dx-drawer-button {
-    display: block;
-    font-weight: 700;
-    width: 56px;
-    height: 56px;
-    line-height: 56px;
-    color: #fff;
-    font-size: 28px;
-    text-align: center;
-    position: fixed;
-    z-index: 2;
-    -moz-transition: all 200ms ease-in;
-    -webkit-transition: all 200ms ease-in;
-    -o-transition: all 200ms ease-in;
-    transition: all 200ms ease-in;
-
-    .dx-icon {
-        font-size: 28px;
-        color: black;
-    }
-}
-
-.dx-drawer-shader {
-    visibility: hidden;
-    -moz-transition: all 200ms ease-in;
-    -webkit-transition: all 200ms ease-in;
-    -o-transition: all 200ms ease-in;
-    transition: all 200ms ease-in;
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    z-index: 4;
-    transition-duration: .5s;
-}
