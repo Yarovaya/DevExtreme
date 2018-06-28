@@ -16,6 +16,10 @@
         margin-left: 0; 
     }
 
+    input[type="checkbox"]:checked ~ .dx-drawer-button-wrapper {
+        width: @DRAWER_WIDTH;
+    }
+
     input[type="checkbox"]:checked ~ .dx-drawer-button-wrapper .dx-drawer-title {
         margin-left: @DRAWER_BUTTON_SIZE + 10px; 
     }
@@ -25,6 +29,7 @@
     }
 
     input[type="checkbox"]:checked ~ .dx-drawer-shader {
+        margin-left: @DRAWER_WIDTH + 5px;
         visibility: visible;
         pointer-events: auto;
         opacity: 0.5;
@@ -33,7 +38,11 @@
     }
 }
 
+.dx-drawer-button-wrapper {
+    width: 60px;
+}
 .dx-drawer-title {
+    padding-top: 18px;
     height: @DRAWER_BUTTON_SIZE;
     margin-left: -@DRAWER_BUTTON_SIZE;
     padding-right: 20px;
@@ -41,8 +50,7 @@
 
 .dx-drawer-content {
     top: @DRAWER_BUTTON_SIZE + 10px;
-    position: fixed;
-    width: 250px;
+    width: @DRAWER_WIDTH;
     height: 100%;
     -moz-transition: all 200ms ease-in;
     -webkit-transition: all 200ms ease-in;
@@ -71,15 +79,12 @@
 
 .dx-drawer-shader {
     visibility: hidden;
-    -moz-transition: all 200ms ease-in;
-    -webkit-transition: all 200ms ease-in;
-    -o-transition: all 200ms ease-in;
-    transition: all 200ms ease-in;
     position: absolute;
     top: 0;
     left: 0;
     height: 100%;
-    width: 100%;
+    width: calc(~ "100%" - @DRAWER_WIDTH);
     z-index: 4;
-    transition-duration: .5s;
+
+    .transition(~"background-color .5s linear");
 }
