@@ -1,36 +1,31 @@
 @DRAWER_BUTTON_SIZE: 60px;
 @DRAWER_WIDTH: 240px;
 
-.dx-drawer-wrapper {
+.dx-drawer {
     width: @DRAWER_WIDTH;
-    overflow: hidden;
-    top: 0;
-    left: 0;
-    margin-right: auto;
+    height: 100%;
 
     input[type="checkbox"] {
         display: none;
     }
 
-    input[type="checkbox"]:checked ~ .dx-drawer-content {
-        margin-left: 0; 
+    input[type="checkbox"]:checked ~ .dx-drawer-wrapper {
+        transform: translate3d(0, 0, 0);
+        // margin-left: 0; 
     }
 
-    input[type="checkbox"]:checked ~ .dx-drawer-button-wrapper {
-        width: @DRAWER_WIDTH;
-    }
-
-    input[type="checkbox"]:checked ~ .dx-drawer-button-wrapper .dx-drawer-title {
+    input[type="checkbox"]:checked ~ .dx-drawer-wrapper .dx-drawer-title {
         margin-left: @DRAWER_BUTTON_SIZE + 10px; 
         opacity: 1;
     }
 
-    input[type="checkbox"]:checked ~ .dx-drawer-button {
-        // left: 260px;
+    input[type="checkbox"]:checked ~ .dx-drawer-wrapper .dx-drawer-content {
+        visibility: visible;
     }
 
+
     input[type="checkbox"]:checked ~ .dx-drawer-shader {
-        margin-left: @DRAWER_WIDTH + 5px;
+        margin-left: @DRAWER_WIDTH + 8px;
         visibility: visible;
         pointer-events: auto;
         opacity: 0.5;
@@ -39,27 +34,35 @@
     }
 }
 
+.dx-drawer-wrapper {
+    width: @DRAWER_WIDTH;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    transform: translate3d(-100%, 0, 0);
+    // margin-left: -@DRAWER_WIDTH; 
+    .transition(~"transform .5s linear");
+}
+
 .dx-drawer-button-wrapper {
-    .transition(~"width .3s linear");
-    width: 60px;
+    width: @DRAWER_WIDTH;
 }
 .dx-drawer-title {
+    font-weight: 700;
     padding-top: 18px;
     height: @DRAWER_BUTTON_SIZE;
-    margin-left: -@DRAWER_BUTTON_SIZE;
-    padding-right: 20px;
     opacity: 0;
-    .transition(~"opacity .3s linear");
+    .transition(~"opacity .5s linear .2s");
+    margin-left: @DRAWER_BUTTON_SIZE;
 }
 
 .dx-drawer-content {
+    visibility: hidden;
     top: @DRAWER_BUTTON_SIZE + 10px;
     width: @DRAWER_WIDTH;
     height: 100%;
-    .transition(~"margin .3s linear");
     z-index: 2;
     left: 0;
-    margin: 0 0 0 -250px;
 }
 
 .dx-drawer-button {
@@ -76,12 +79,11 @@
 
 .dx-drawer-shader {
     visibility: hidden;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     height: 100%;
-    width: calc(~ "100%" - @DRAWER_WIDTH);
-    z-index: 4;
+    width: 100%;
 
-    .transition(~"background-color .3s linear");
+    .transition(~"background-color .5s linear .2s");
 }

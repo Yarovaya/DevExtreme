@@ -69,16 +69,37 @@ var Drawer = Widget.inherit({
 
         this._refreshModeClass();
 
-        this._renderWrapper();
-
         this._renderCheckBox();
-
-        this._renderButtonWrapper();
-        this._renderButton();
-        this._renderTitle();
         this._renderShader();
 
+        this._renderButton();
+
+        this._renderWrapper();
+
+        this._renderButtonWrapper();
+        this._renderTitle();
+
         this.setAria("role", "drawer");
+    },
+
+    _renderButton: function() {
+        this._$button = $("<label>")
+        .addClass(DRAWER_BUTTON_CLASS)
+        .attr("for", DRAWER_NAVIGATION_ID)
+        .appendTo(this.$element());
+
+        this._$icon = $("<div>")
+            .addClass("dx-icon dx-icon-menu")
+            .appendTo(this._$button);
+
+    },
+
+    _renderCheckBox: function() {
+        this._$checkBoxInput = $("<input>")
+            .attr("type", "checkbox")
+            .attr("id", DRAWER_NAVIGATION_ID)
+            .addClass(DRAWER_CHECKBOX_CLASS)
+            .appendTo(this.$element());
     },
 
     _refreshModeClass: function(prevClass) {
@@ -109,26 +130,6 @@ var Drawer = Widget.inherit({
         });
     },
 
-    _renderButton: function() {
-        this._$button = $("<label>")
-        .addClass(DRAWER_BUTTON_CLASS)
-        .attr("for", DRAWER_NAVIGATION_ID)
-        .appendTo(this._$buttonWrapper);
-
-        this._$icon = $("<div>")
-            .addClass("dx-icon dx-icon-menu")
-            .appendTo(this._$button);
-
-    },
-
-    _renderCheckBox: function() {
-        this._$checkBoxInput = $("<input>")
-            .attr("type", "checkbox")
-            .attr("id", DRAWER_NAVIGATION_ID)
-            .addClass(DRAWER_CHECKBOX_CLASS)
-            .appendTo(this._$wrapper);
-    },
-
     _renderTitle: function() {
         var titleText = this.option("title"),
             showTitle = this.option("showTitle");
@@ -149,7 +150,7 @@ var Drawer = Widget.inherit({
     },
 
     _renderShader: function() {
-        this._$shader = $("<div>").addClass(DRAWER_SCHADER_CLASS).appendTo(this._$wrapper);
+        this._$shader = $("<div>").addClass(DRAWER_SCHADER_CLASS).appendTo(this.$element());
     },
 
     _optionChanged: function(args) {
