@@ -4,6 +4,8 @@
 .dx-drawer {
     width: @DRAWER_WIDTH;
     height: 100%;
+    z-index: 1000;
+    position: absolute;
 
     input[type="checkbox"] {
         display: none;
@@ -36,11 +38,11 @@
 
 .dx-drawer-wrapper {
     width: @DRAWER_WIDTH;
+    height: 100%;
     overflow: hidden;
     top: 0;
     left: 0;
     transform: translate3d(-100%, 0, 0);
-    // margin-left: -@DRAWER_WIDTH; 
     .transition(~"transform .5s linear");
 }
 
