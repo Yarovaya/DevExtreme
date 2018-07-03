@@ -2016,6 +2016,7 @@ var SchedulerWorkSpace = Widget.inherit({
         return {
             top: position.top + shift.top,
             left: position.left + shift.left,
+            sortTop: position.top + shift.sortTop,
             rowIndex: position.rowIndex,
             cellIndex: position.cellIndex,
             hMax: this._groupedStrategy.getHorizontalMax(groupIndex),
