@@ -2055,6 +2055,10 @@ var SchedulerWorkSpace = Widget.inherit({
         };
     },
 
+    applySnapping: function() {
+        return false;
+    },
+
     getTimeShift: function(date) {
         var cellDuration = this.getCellDuration(),
             currentDayStart = new Date(date);

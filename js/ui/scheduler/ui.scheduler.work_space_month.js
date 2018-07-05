@@ -231,6 +231,9 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         };
     },
 
+    applySnapping: function() {
+        return true;
+    },
 
     getCoordinatesByDates: function(startDate, endDate) {
         var result = [],
