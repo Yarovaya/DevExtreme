@@ -2023,7 +2023,7 @@ var SchedulerWorkSpace = Widget.inherit({
             groupIndex: groupIndex
         };
 
-        if(isDefined(shift.cellTop)) {
+        if(this.applySnapping()) {
             extend(coordinates, {
                 cellTop: position.top + shift.cellTop
             });
