@@ -2023,9 +2023,9 @@ var SchedulerWorkSpace = Widget.inherit({
             groupIndex: groupIndex
         };
 
-        if(isDefined(shift.sortTop)) {
+        if(isDefined(shift.cellTop)) {
             extend(coordinates, {
-                sortTop: position.top + shift.sortTop
+                cellTop: position.top + shift.cellTop
             });
         }
         return coordinates;
