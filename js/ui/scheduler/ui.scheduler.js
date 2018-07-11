@@ -2159,6 +2159,13 @@ var Scheduler = Widget.inherit({
         this._workSpace.updateScrollPosition(startDate);
     },
 
+    _convertDateFieldByTimezone: function(obj, dateFieldName) {
+        var date = new Date(this.fire("getField", dateFieldName, obj));
+        var tzDiff = this._getTimezoneOffsetByOption() * 3600000 + this.fire("getClientTimezoneOffset", date);
+
+        return new Date(date.getTime() + tzDiff);
+    },
+
     _saveChanges: function(disableButton) {
         var validation = this._appointmentForm.validate();
 
@@ -2172,32 +2179,19 @@ var Scheduler = Widget.inherit({
             oldData = this._editAppointmentData,
             recData = this._updatedRecAppointment;
 
-        function convert(obj, dateFieldName) {
-            var date = new Date(this.fire("getField", dateFieldName, obj));
-            var tzDiff = this._getTimezoneOffsetByOption() * 3600000 + this.fire("getClientTimezoneOffset", date);
-
-            return new Date(date.getTime() + tzDiff);
-        }
-
         if(oldData) {
             this._convertDatesByTimezoneBack(false, formData);
         }
 
         if(oldData && !recData) {
             this.updateAppointment(oldData, formData);
-
-            if(typeof this._getTimezoneOffsetByOption() === "number") {
-                this.fire("setField", "startDate", formData, convert.call(this, formData, "startDate"));
-                this.fire("setField", "endDate", formData, convert.call(this, formData, "endDate"));
-            }
         } else {
-
             recData && this.updateAppointment(oldData, recData);
             delete this._updatedRecAppointment;
 
             if(typeof this._getTimezoneOffsetByOption() === "number") {
-                this.fire("setField", "startDate", formData, convert.call(this, formData, "startDate"));
-                this.fire("setField", "endDate", formData, convert.call(this, formData, "endDate"));
+                this.fire("setField", "startDate", formData, this._convertDateFieldByTimezone.call(this, formData, "startDate"));
+                this.fire("setField", "endDate", formData, this._convertDateFieldByTimezone.call(this, formData, "endDate"));
             }
             this.addAppointment(formData);
         }
@@ -2528,6 +2522,8 @@ var Scheduler = Widget.inherit({
                     performFailAction(err);
                 }
             } else {
+                this.fire("setField", "startDate", appointment, this._convertDateFieldByTimezone.call(this, appointment, "startDate"));
+                this.fire("setField", "endDate", appointment, this._convertDateFieldByTimezone.call(this, appointment, "endDate"));
                 performFailAction();
             }
         });
@@ -2882,6 +2878,8 @@ var Scheduler = Widget.inherit({
                 }).always((function(e) {
                     this._executeActionWhenOperationIsCompleted(this._actions["onAppointmentAdded"], appointment, e);
                 }).bind(this));
+            } else {
+                this._convertDatesByTimezoneBack(false, appointment);
             }
         });
     },
