@@ -11,7 +11,6 @@ import EmptyTemplate from "../widget/empty_template";
 import windowUtils from "../../core/utils/window";
 import PushStrategy from "./ui.drawer.rendering.strategy.push";
 import ShrinkStrategy from "./ui.drawer.rendering.strategy.shrink";
-import OverlapStrategy from "./ui.drawer.rendering.strategy.overlap";
 import { animation } from "./ui.drawer.rendering.strategy";
 
 const DRAWER_CLASS = "dx-drawer";
@@ -158,11 +157,8 @@ const Drawer = Widget.inherit({
         if(mode === "push") {
             Strategy = PushStrategy;
         }
-        if(mode === "shrink") {
+        if(mode === "shrink" || mode === "overlap") {
             Strategy = ShrinkStrategy;
-        }
-        if(mode === "overlap") {
-            Strategy = OverlapStrategy;
         }
 
         this._strategy = new Strategy(this);

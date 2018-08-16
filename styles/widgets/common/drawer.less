@@ -53,18 +53,36 @@
     }
 }
 
+.dx-drawer-overlap,
 .dx-drawer-shrink {
-    .dx-drawer-menu-content {
-        flex: 0 0 auto;
-        position: relative;
-    }
     .dx-drawer-wrapper {
         flex: 1 0 auto;
         display: flex;
         flex-direction: row;
     }
+
     .dx-drawer-content {
         position: relative;
         flex: 1 1 auto;
+    }
+}
+
+.dx-drawer-overlap {
+     .dx-drawer-menu-content {
+         position: absolute;
+         top: 0;
+         bottom: 0
+     }
+}
+.dx-drawer-shrink {
+    .dx-drawer-wrapper {
+        flex: 1 0 auto;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .dx-drawer-menu-content {
+        flex: 0 0 auto;
+        position: relative;
     }
 }
