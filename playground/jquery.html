@@ -22,12 +22,66 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js"></script>
 </head>
 <body>
-    <div id="button"></div>
+    <div id="scheduler"></div>
     <script>
         $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
+            var data = [
+                {
+                    text: "Website Re-Design Plan",
+                    priorityId: 2,
+                    startDate: new Date(2018, 4, 22, 9, 30),
+                    endDate: new Date(2018, 4, 22, 11, 30)
+                }, {
+                    text: "Book Flights to San Fran for Sales Trip",
+                    priorityId: 1,
+                    startDate: new Date(2018, 4, 24, 10, 0),
+                    endDate: new Date(2018, 4, 24, 12, 0),
+                }, {
+                    text: "Install New Router in Dev Room",
+                    priorityId: 1,
+                    startDate: new Date(2018, 4, 21, 13),
+                    endDate: new Date(2018, 4, 21, 15, 30)
+                }
+            ];
+
+
+var priorityData = [
+    {
+        text: "Low Priority",
+        id: 1,
+        color: "#1e90ff"
+    }, {
+        text: "High Priority",
+        id: 2,
+        color: "#ff9747"
+    }
+];
+
+            $("#scheduler").dxScheduler({
+                dataSource: data,
+                views: [{
+                    type: "day",
+                    name: "Day",
+                    groupOrientation: "horizontal",
+                    cellDuration: 60,
+                    intervalCount: 2
+                }],
+                currentView: "Day",
+                //crossScrollingEnabled: true,
+                currentDate: new Date(2018, 4, 21),
+                startDayHour: 9,
+                //endDayHour: 10,
+                groupByDate: true,
+                groups: ["priorityId"],
+                resources: [
+                    { 
+                        fieldExpr: "priorityId", 
+                        allowMultiple: false, 
+                        dataSource: priorityData,
+                        label: "Priority"
+                    }
+                ],
+                height: 700
             });
         });
     </script>
