@@ -270,7 +270,17 @@ var Component = Class.inherit({
         this._disposingAction = this._createActionByOption("onDisposing", { excludeValidators: ["disabled", "readOnly", "designMode"] });
     },
 
+    _setOptionSilent: function(name, value) {
+        this._cancelOptionChange = name;
+        this.option(name, value);
+        this._cancelOptionChange = false;
+    },
+
     _optionChanged: function(args) {
+        if(this._cancelOptionChange === args.name) {
+            return;
+        }
+
         switch(args.name) {
             case "onDisposing":
             case "onInitialized":
