@@ -35,6 +35,9 @@ class OverlapStrategy extends DrawerStrategy {
                 }
             }).bind(this),
             contentTemplate: template,
+            onContentReady: () => {
+                this.getDrawerInstance()._templateRendered();
+            },
             visible: true,
             propagateOutsideClick: true
         });

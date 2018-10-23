@@ -97,7 +97,10 @@ class DrawerStrategy {
 
     renderPanel(template) {
         template && template.render({
-            container: this.getDrawerInstance().content()
+            container: this.getDrawerInstance().content(),
+            onRendered: () => {
+                this.getDrawerInstance()._templateRendered();
+            }
         });
     }
 

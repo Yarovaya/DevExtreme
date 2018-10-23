@@ -226,6 +226,10 @@ const Drawer = Widget.inherit({
     _initMarkup() {
         this.callBase();
 
+        this._whenPanelRendered = new Promise((resolve) => {
+            this._templateRendered = resolve;
+        });
+
         this._toggleVisibleClass(this.option("opened"));
         this._renderMarkup();
 
@@ -254,6 +258,10 @@ const Drawer = Widget.inherit({
 
         this.callBase();
 
+        this._whenPanelRendered.then(() => { this._renderPanelPosition(); }, () => { this._renderPanelPosition(); });
+    },
+
+    _renderPanelPosition() {
         this._dimensionChanged();
         this._renderPosition(this.option("opened"), false);
     },
