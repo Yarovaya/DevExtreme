@@ -1,6 +1,5 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
-    translator = require("../../animation/translator"),
     recurrenceUtils = require("./utils.recurrence"),
     extend = require("../../core/utils/extend").extend,
     registerComponent = require("../../core/component_registrator"),
@@ -130,10 +129,17 @@ var Appointment = DOMComponent.inherit({
         var geometry = this.option("geometry"),
             $element = this.$element();
 
-        translator.move($element, {
-            top: geometry.top,
-            left: geometry.left
-        });
+        // translator.move($element, {
+        //     top: "80%",
+        //     left: "50%"
+        // });
+
+        if(!geometry.leftInPercent) {
+            geometry.leftInPercent = geometry.left;
+            geometry.topInPercent = geometry.top;
+        }
+        $element.css("left", geometry.leftInPercent);
+        $element.css("top", geometry.topInPercent);
 
         $element.css({
             width: geometry.width < 0 ? 0 : geometry.width,

@@ -196,12 +196,36 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             this._markAppointmentAsVirtual(coordinates, isAllDay);
         }
 
+        var convertedSizes = this.convertToPercent(appointmentWidth, height),
+            convertedPositions = this.convertToPercentX(appointmentLeft - 100, top),
+            oneCell = (this.instance.fire("getDateTableWidth") - 100) / this.instance.fire("getCellCount"),
+            percents = oneCell * 100 / (this.instance.fire("getDateTableWidth") - 100),
+            count = Math.min(appointmentCountPerCell, coordinates.count);
+
         return {
-            height: height,
-            width: appointmentWidth,
+            height: convertedSizes.y + "%",
+            width: "calc((" + percents + "% - " + 40 + "px)/" + count + ")",
+            // width: convertedSizes.x + "%",
             top: top,
+            topInPercent: convertedPositions.y + "%",
+            // leftInPercent: convertedPositions.x + "%",
+            leftInPercent: "calc(" + convertedPositions.x + "% - " + convertedPositions.x + "px)",
             left: appointmentLeft,
             empty: this._isAppointmentEmpty(height, width)
+        };
+    },
+
+    convertToPercent: function(x, y) {
+        return {
+            y: y * 100 / this.instance.fire("getDateTableHeight"),
+            x: x * 100 / (this.instance.fire("getDateTableWidth") - 100)
+        };
+    },
+
+    convertToPercentX: function(x, y) {
+        return {
+            y: y * 100 / this.instance.fire("getDateTableHeight"),
+            x: x * 100 / (this.instance.fire("getDateTableWidth") - 100)
         };
     },
 

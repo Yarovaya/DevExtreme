@@ -2051,6 +2051,14 @@ var SchedulerWorkSpace = Widget.inherit({
         return extend(true, {}, data);
     },
 
+    getDateTableHeight: function() {
+        return this._$dateTable.get(0).getBoundingClientRect().height;
+    },
+
+    getDateTableWidth: function() {
+        return this._$dateTable.get(0).getBoundingClientRect().width;
+    },
+
     _getHorizontalMax: function(groupIndex) {
         groupIndex = this.option("groupByDate") ? this._getGroupCount() - 1 : groupIndex;
 

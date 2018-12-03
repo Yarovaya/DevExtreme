@@ -297,6 +297,18 @@ var subscribes = {
         return this._cellHeight;
     },
 
+    getDateTableWidth: function() {
+        return this._workSpace.getDateTableWidth();
+    },
+
+    getDateTableHeight: function() {
+        return this._workSpace.getDateTableHeight();
+    },
+
+    getCellCount: function() {
+        return this.getWorkSpace()._getCellCount();
+    },
+
     getResizableStep: function() {
         var cellWidth = this._cellWidth,
             workSpace = this.getWorkSpace();
