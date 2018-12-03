@@ -503,6 +503,11 @@
     }
 
     .dx-scheduler-fixed-appointments {
+        height: 100%;
+        width: 100%;
+
+        pointer-events: none;
+
         z-index: 100;
         position: absolute;
         left: @SCHEDULER_LEFT_COLUMN_WIDTH;
@@ -1773,9 +1778,24 @@
     .dx-scheduler-scrollable-appointments {
         position: absolute;
         top: 0;
+
+        width: 100%;
+        height: 100%;
+
+        pointer-events: none;
+    }
+
+    .dx-scheduler-work-space-day,
+    .dx-scheduler-work-space-week,
+    .dx-scheduler-work-space-work-week {
+        .dx-scheduler-scrollable-appointments {
+            margin-left: 100px;
+        }
     }
 
     .dx-scheduler-appointment {
+        pointer-events: all;
+        
         border-bottom: @SCHEDULER_TRANSPARENT_TOP_BORDER;
         background-clip: padding-box;
         position: absolute;
