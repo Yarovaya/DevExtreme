@@ -610,12 +610,31 @@ var BaseRenderingStrategy = Class.inherit({
             this._markAppointmentAsVirtual(coordinates, isAllDay);
         }
 
+        var convertedSizes = this.convertToPercent(width, appointmentHeight),
+            convertedPositions = this.convertToPercentX(left, top);
+
         return {
-            height: appointmentHeight,
-            width: width,
+            height: convertedSizes.y + "%",
+            width: convertedSizes.x + "%",
             top: top,
+            topInPercent: convertedPositions.y + "%",
+            leftInPercent: convertedPositions.x + "%",
             left: left,
             empty: this._isAppointmentEmpty(height, width)
+        };
+    },
+
+    convertToPercent: function(x, y) {
+        return {
+            y: y * 100 / this.instance.fire("getDateTableHeight"),
+            x: x * 100 / (this.instance.fire("getDateTableWidth"))
+        };
+    },
+
+    convertToPercentX: function(x, y) {
+        return {
+            y: y * 100 / this.instance.fire("getDateTableHeight"),
+            x: x * 100 / (this.instance.fire("getDateTableWidth"))
         };
     },
 
