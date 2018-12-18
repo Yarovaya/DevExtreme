@@ -1494,20 +1494,8 @@ var Scheduler = Widget.inherit({
         result && result.resolve();
     },
 
-    _dimensionChanged: function() {
-        // var filteredItems = this.getFilteredItems();
-
+    _dimensionChanged: function(visible) {
         this._toggleSmallClass();
-
-        // if(!this._isAgenda() && filteredItems && this._isVisible()) {
-        //     this._workSpace._cleanAllowedPositions();
-        //     this._workSpace.option("allDayExpanded", this._isAllDayExpanded(filteredItems));
-
-        //     var appointments = this._layoutManager.createAppointmentsMap(filteredItems);
-
-        //     this._appointments.option("items", appointments);
-        // }
-
         this.hideAppointmentTooltip();
     },
 
@@ -1522,7 +1510,24 @@ var Scheduler = Widget.inherit({
     },
 
     _visibilityChanged: function(visible) {
-        visible && this._dimensionChanged();
+        visible && this._refreshAppointments();
+    },
+
+    _refreshAppointments: function() {
+        var filteredItems = this.getFilteredItems();
+
+        this._toggleSmallClass();
+
+        if(!this._isAgenda() && filteredItems && this._isVisible()) {
+            this._workSpace._cleanAllowedPositions();
+            this._workSpace.option("allDayExpanded", this._isAllDayExpanded(filteredItems));
+
+            var appointments = this._layoutManager.createAppointmentsMap(filteredItems);
+
+            this._appointments.option("items", appointments);
+        }
+
+        this.hideAppointmentTooltip();
     },
 
     _dataSourceOptions: function() {
