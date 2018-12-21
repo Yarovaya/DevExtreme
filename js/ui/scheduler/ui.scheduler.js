@@ -2577,7 +2577,6 @@ var Scheduler = Widget.inherit({
                 updatedStartDate = apptDataCalculator($appointment, startDate).startDate;
             } else {
                 var coordinates = $appointment.position();
-                coordinates.left = coordinates.left + this.instance.fire("getWorkSpaceDateTableOffset");
 
                 updatedStartDate = new Date(this._workSpace.getCellDataByCoordinates(coordinates, isAllDay).startDate);
 
