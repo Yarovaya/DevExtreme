@@ -2831,7 +2831,8 @@ QUnit.testStart(function() {
             },
             currentDate: new Date(2015, 1, 9),
             views: ["week"],
-            currentView: "week"
+            currentView: "week",
+            startDayHour: 16
         });
     });
 
@@ -3335,7 +3336,7 @@ QUnit.testStart(function() {
                     $header = element.getHeader().$element(),
                     $workSpace = element.getWorkSpace().$element(),
                     $appointment = $element.find(".dx-scheduler-appointment"),
-                    appointmentPosition = translator.locate($appointment);
+                    appointmentPosition = $appointment.position();
 
                 assert.equal($header.length, 1, "Header is rendered");
                 assert.equal($workSpace.length, 1, "Work Space is rendered");
@@ -3360,7 +3361,7 @@ QUnit.testStart(function() {
         this.instance.option("onContentReady", function(e) {
             var $element = $(e.component.$element()),
                 $appointment = $element.find(".dx-scheduler-appointment"),
-                appointmentPosition = translator.locate($appointment);
+                appointmentPosition = $appointment.position();
 
             assert.equal($appointment.length, 1, "Appointment is rendered");
             assert.roughEqual(appointmentPosition.top, 100, 2.001, "Appointment top is OK");
@@ -3391,7 +3392,7 @@ QUnit.testStart(function() {
         this.instance.option("onContentReady", function(e) {
             var $element = $(e.component.$element()),
                 $appointment = $element.find(".dx-scheduler-appointment"),
-                appointmentPosition = translator.locate($appointment);
+                appointmentPosition = $appointment.position();
 
             assert.equal($appointment.length, 1, "Appointment is rendered");
             assert.roughEqual(appointmentPosition.top, 150, 2.001, "Appointment top is OK");
@@ -3894,7 +3895,6 @@ QUnit.testStart(function() {
             domUtils.triggerShownEvent($("#scheduler"));
             this.instance.option("width", 600);
             this.clock.tick();
-
             var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
             assert.roughEqual($appointment.position().left, 100, 1.001, "Appointment is rendered correctly");
         }

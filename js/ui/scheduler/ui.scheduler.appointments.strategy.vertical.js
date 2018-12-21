@@ -196,12 +196,15 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             this._markAppointmentAsVirtual(coordinates, isAllDay);
         }
 
-        var convertedSizes = this.convertToPercent(appointmentWidth, height),
-            convertedPositions = this.convertToPercentX(appointmentLeft - 100, top),
-            oneCell = (this.instance.fire("getDateTableWidth") - 100) / this.instance.fire("getCellCount"),
-            percents = oneCell * 100 / (this.instance.fire("getDateTableWidth") - 100),
+        var dateTableOffset = this.instance.fire("getWorkSpaceDateTableOffset");
+
+        var convertedSizes = this.convertToPercent(appointmentWidth, height, dateTableOffset),
+            convertedPositions = this.convertToPercentX(appointmentLeft - dateTableOffset, top, dateTableOffset),
+            oneCell = (this.instance.fire("getDateTableWidth") - dateTableOffset) / this.instance.fire("getCellCount"),
+            percents = oneCell * dateTableOffset / (this.instance.fire("getDateTableWidth") - dateTableOffset),
             count = Math.min(appointmentCountPerCell, coordinates.count);
 
+        var a = dateTableOffset - convertedPositions.x;
         return {
             height: convertedSizes.y + "%",
             width: "calc((" + percents + "% - " + 40 + "px)/" + count + ")",
@@ -209,23 +212,23 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             top: top,
             topInPercent: convertedPositions.y + "%",
             // leftInPercent: convertedPositions.x + "%",
-            leftInPercent: "calc(" + convertedPositions.x + "% - " + convertedPositions.x + "px)",
+            leftInPercent: "calc(" + convertedPositions.x + "% + " + a + "px)",
             left: appointmentLeft,
             empty: this._isAppointmentEmpty(height, width)
         };
     },
 
-    convertToPercent: function(x, y) {
+    convertToPercent: function(x, y, offset) {
         return {
             y: y * 100 / this.instance.fire("getDateTableHeight"),
-            x: x * 100 / (this.instance.fire("getDateTableWidth") - 100)
+            x: x * 100 / (this.instance.fire("getDateTableWidth") - offset)
         };
     },
 
-    convertToPercentX: function(x, y) {
+    convertToPercentX: function(x, y, offset) {
         return {
             y: y * 100 / this.instance.fire("getDateTableHeight"),
-            x: x * 100 / (this.instance.fire("getDateTableWidth") - 100)
+            x: x * 100 / (this.instance.fire("getDateTableWidth") - offset)
         };
     },
 

@@ -1,6 +1,5 @@
 var $ = require("../../core/renderer"),
     Callbacks = require("../../core/utils/callbacks"),
-    translator = require("../../animation/translator"),
     errors = require("../widget/ui.errors"),
     windowUtils = require("../../core/utils/window"),
     dialog = require("../dialog"),
@@ -1496,6 +1495,10 @@ var Scheduler = Widget.inherit({
 
     _dimensionChanged: function(visible) {
         this._toggleSmallClass();
+
+        if(this._isSizeChanged()) {
+            this._refreshAppointments();
+        }
         this.hideAppointmentTooltip();
     },
 
@@ -1506,6 +1509,10 @@ var Scheduler = Widget.inherit({
 
     _toggleSmallClass: function() {
         var width = this.$element().get(0).getBoundingClientRect().width;
+
+        if((width < WIDGET_SMALL_WIDTH && !this.$element().hasClass(WIDGET_SMALL_CLASS)) || (width >= WIDGET_SMALL_WIDTH && this.$element().hasClass(WIDGET_SMALL_CLASS))) {
+            this._sizeChanged = true;
+        }
         this.$element().toggleClass(WIDGET_SMALL_CLASS, width < WIDGET_SMALL_WIDTH);
     },
 
@@ -1528,6 +1535,12 @@ var Scheduler = Widget.inherit({
         }
 
         this.hideAppointmentTooltip();
+
+        this._sizeChanged = false;
+    },
+
+    _isSizeChanged: function() {
+        return this._sizeChanged;
     },
 
     _dataSourceOptions: function() {
@@ -2563,7 +2576,9 @@ var Scheduler = Widget.inherit({
             if(typeUtils.isFunction(apptDataCalculator)) {
                 updatedStartDate = apptDataCalculator($appointment, startDate).startDate;
             } else {
-                var coordinates = translator.locate($appointment);
+                var coordinates = $appointment.position();
+                coordinates.left = coordinates.left + this.instance.fire("getWorkSpaceDateTableOffset");
+
                 updatedStartDate = new Date(this._workSpace.getCellDataByCoordinates(coordinates, isAllDay).startDate);
 
                 if($appointment.hasClass("dx-scheduler-appointment-reduced")) {
