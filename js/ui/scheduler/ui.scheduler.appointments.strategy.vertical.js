@@ -209,11 +209,9 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             height: convertedSizes.y + "%",
             width: "calc((" + percents + "% - " + 40 + "px)/" + count + ")",
             // width: convertedSizes.x + "%",
-            top: top,
-            topInPercent: convertedPositions.y + "%",
+            top: convertedPositions.y + "%",
             // leftInPercent: convertedPositions.x + "%",
-            leftInPercent: "calc(" + convertedPositions.x + "% + " + a + "px)",
-            left: appointmentLeft,
+            left: "calc(" + convertedPositions.x + "% + " + a + "px)",
             empty: this._isAppointmentEmpty(height, width)
         };
     },

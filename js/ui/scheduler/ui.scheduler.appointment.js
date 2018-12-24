@@ -134,12 +134,12 @@ var Appointment = DOMComponent.inherit({
         //     left: "50%"
         // });
 
-        if(!geometry.leftInPercent) {
-            geometry.leftInPercent = geometry.left;
-            geometry.topInPercent = geometry.top;
-        }
-        $element.css("left", geometry.leftInPercent);
-        $element.css("top", geometry.topInPercent);
+        // if(!geometry.leftInPercent) {
+        //     geometry.leftInPercent = geometry.left;
+        //     geometry.topInPercent = geometry.top;
+        // }
+        $element.css("left", geometry.left);
+        $element.css("top", geometry.top);
 
         $element.css({
             width: geometry.width < 0 ? 0 : geometry.width,

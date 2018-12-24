@@ -597,7 +597,9 @@ var BaseRenderingStrategy = Class.inherit({
             width = coordinates.width,
             left = coordinates.left,
             compactAppointmentDefaultSize,
-            compactAppointmentDefaultOffset;
+            compactAppointmentDefaultOffset,
+            convertedSizes,
+            convertedPositions;
 
         if(coordinates.isCompact) {
             compactAppointmentDefaultSize = this.getCompactAppointmentDefaultSize();
@@ -610,17 +612,37 @@ var BaseRenderingStrategy = Class.inherit({
             this._markAppointmentAsVirtual(coordinates, isAllDay);
         }
 
-        var convertedSizes = this.convertToPercent(width, appointmentHeight),
+        if(coordinates.allDay) {
+            var dateTableOffset = this.instance.fire("getWorkSpaceDateTableOffset");
+
+            convertedSizes = this.convertToPercentAllDay(width, appointmentHeight, dateTableOffset);
+            convertedPositions = this.convertToPercentAllDay(left - dateTableOffset, top, dateTableOffset);
+
+            var a = dateTableOffset - convertedPositions.x;
+            return {
+                height: appointmentHeight,
+                width: convertedSizes.x + "%",
+                top: "auto",
+                left: "calc(" + convertedPositions.x + "% + " + a + "px)",
+                empty: this._isAppointmentEmpty(height, width)
+            };
+        } else {
+            convertedSizes = this.convertToPercent(width, appointmentHeight),
             convertedPositions = this.convertToPercentX(left, top);
 
+            return {
+                height: convertedSizes.y + "%",
+                width: convertedSizes.x + "%",
+                top: convertedPositions.y + "%",
+                left: convertedPositions.x + "%",
+                empty: this._isAppointmentEmpty(height, width)
+            };
+        }
+    },
+
+    convertToPercentAllDay: function(x, y, offset) {
         return {
-            height: convertedSizes.y + "%",
-            width: convertedSizes.x + "%",
-            top: top,
-            topInPercent: convertedPositions.y + "%",
-            leftInPercent: convertedPositions.x + "%",
-            left: left,
-            empty: this._isAppointmentEmpty(height, width)
+            x: x * 100 / (this.instance.fire("getDateTableWidth") - offset)
         };
     },
 
