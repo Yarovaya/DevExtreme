@@ -196,12 +196,36 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             this._markAppointmentAsVirtual(coordinates, isAllDay);
         }
 
+        var dateTableOffset = this.instance.fire("getWorkSpaceDateTableOffset");
+
+        var convertedPositions = this.convertToPercentX(appointmentLeft - dateTableOffset, top, dateTableOffset),
+            oneCell = (this.instance.fire("getDateTableWidth") - dateTableOffset) / this.instance.fire("getCellCount"),
+            percents = oneCell * dateTableOffset / (this.instance.fire("getDateTableWidth") - dateTableOffset),
+            count = Math.min(appointmentCountPerCell, coordinates.count);
+
+        var leftOffset = dateTableOffset - convertedPositions.x * dateTableOffset / 100;
+        var appointmentOffsetInCell = WEEK_APPOINTMENT_DEFAULT_OFFSET / count + percents * dateTableOffset / (count * 100);
+        percents = percents / count;
         return {
             height: height,
-            width: appointmentWidth,
-            top: top,
-            left: appointmentLeft,
+            width: "calc((" + percents + "% - " + appointmentOffsetInCell + "px))",
+            top: convertedPositions.y + "%",
+            left: "calc(" + convertedPositions.x + "% + " + leftOffset + "px)",
             empty: this._isAppointmentEmpty(height, width)
+        };
+    },
+
+    convertToPercent: function(x, y, offset) {
+        return {
+            y: y * 100 / this.instance.fire("getDateTableHeight"),
+            x: x * 100 / (this.instance.fire("getDateTableWidth") - offset)
+        };
+    },
+
+    convertToPercentX: function(x, y, offset) {
+        return {
+            y: y * 100 / this.instance.fire("getDateTableHeight"),
+            x: x * 100 / (this.instance.fire("getDateTableWidth") - offset)
         };
     },
 

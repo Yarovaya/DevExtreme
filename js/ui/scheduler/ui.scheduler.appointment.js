@@ -135,10 +135,8 @@ var Appointment = DOMComponent.inherit({
                 top: geometry.top
             });
         } else {
-            translator.move($element, {
-                top: geometry.top,
-                left: geometry.left
-            });
+            $element.css("left", geometry.left);
+            $element.css("top", geometry.top);
         }
 
         $element.css({

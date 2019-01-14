@@ -331,6 +331,14 @@ var subscribes = {
         return this._workSpace.getDateTableWidth();
     },
 
+    getDateTableHeight: function() {
+        return this._workSpace.getDateTableHeight();
+    },
+
+    getCellCount: function() {
+        return this.getWorkSpace()._getCellCount();
+    },
+
     getTimePanelWidth: function() {
         return this._workSpace.getTimePanelWidth();
     },

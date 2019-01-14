@@ -2464,6 +2464,10 @@ var SchedulerWorkSpace = Widget.inherit({
         return this._$dateTable.get(0).getBoundingClientRect().width;
     },
 
+    getDateTableHeight: function() {
+        return this._$dateTable.get(0).getBoundingClientRect().height;
+    },
+
     applyGroupButtonOffset: function() {
         return false;
     },

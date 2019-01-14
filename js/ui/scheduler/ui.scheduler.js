@@ -1503,8 +1503,7 @@ var Scheduler = Widget.inherit({
             this._workSpace._cleanAllowedPositions();
             this._workSpace.option("allDayExpanded", this._isAllDayExpanded(filteredItems));
 
-            var appointments = this._layoutManager.createAppointmentsMap(filteredItems);
-
+            var appointments = this._getAppointmentsToRepaint(true);
             this._appointments.option("items", appointments);
         }
 
@@ -1636,9 +1635,9 @@ var Scheduler = Widget.inherit({
         }
     },
 
-    _getAppointmentsToRepaint: function() {
+    _getAppointmentsToRepaint: function(checkCompacting) {
         var appointments = this._layoutManager.createAppointmentsMap(this._filteredItems);
-        return this._layoutManager.markRepaintedAppointments(appointments, this.getAppointmentsInstance().option("items"));
+        return this._layoutManager.markRepaintedAppointments(appointments, this.getAppointmentsInstance().option("items"), checkCompacting);
     },
 
     _initExpressions: function(fields) {

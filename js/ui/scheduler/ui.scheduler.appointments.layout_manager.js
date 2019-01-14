@@ -1,5 +1,6 @@
 var Class = require("../../core/class"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
     VerticalAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.vertical"),
     HorizontalAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.horizontal"),
@@ -116,7 +117,7 @@ var AppointmentLayoutManager = Class.inherit({
         return appointment && (commonUtils.equalByValue(itemData, appointment) || Object.keys(appointment).length !== Object.keys(itemData).length);
     },
 
-    markRepaintedAppointments: function(appointments, renderedItems) {
+    markRepaintedAppointments: function(appointments, renderedItems, checkCompacting) {
         var isAgenda = this.renderingStrategy === "agenda",
             result = this._markDeletedAppointments(renderedItems, appointments),
             itemFound,
@@ -136,6 +137,10 @@ var AppointmentLayoutManager = Class.inherit({
                         if(isAgenda) {
                             repaintAll = true;
                         }
+                    }
+
+                    if(checkCompacting && this._compareSettings(currentItem, item, isAgenda, checkCompacting)) {
+                        repaintAll = true;
                     }
 
                     if(this._compareSettings(currentItem, item, isAgenda) || repaintAll) {
@@ -163,7 +168,7 @@ var AppointmentLayoutManager = Class.inherit({
         return isAgenda && result.length ? result : renderedItems;
     },
 
-    _compareSettings: function(currentItem, item, isAgenda) {
+    _compareSettings: function(currentItem, item, isAgenda, checkCompacting) {
         var currentItemSettingsLength = currentItem.settings.length,
             itemSettingsLength = item.settings.length,
             result = false;
@@ -177,7 +182,12 @@ var AppointmentLayoutManager = Class.inherit({
                     itemSettings.sortedIndex = currentItemSettings.sortedIndex;
                 }
 
-                if(!commonUtils.equalByValue(currentItemSettings, itemSettings)) {
+                if(checkCompacting && (typeUtils.isDefined(currentItemSettings.isCompact) || typeUtils.isDefined(itemSettings.isCompact)) && currentItemSettings.isCompact !== itemSettings.isCompact) {
+                    result = true;
+
+                    break;
+                }
+                if(!checkCompacting && !commonUtils.equalByValue(currentItemSettings, itemSettings)) {
 
                     result = true;
                     break;
