@@ -751,9 +751,9 @@ QUnit.test("Appointment should be rendered a many times if coordinates array con
     var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal($appointment.length, 3, "All appointments are rendered");
-    assert.deepEqual(translator.locate($appointment.eq(0)), { top: 0, left: 0 }, "appointment is rendered in right place");
-    assert.deepEqual(translator.locate($appointment.eq(1)), { top: 10, left: 10 }, "appointment is rendered in right place");
-    assert.deepEqual(translator.locate($appointment.eq(2)), { top: 20, left: 20 }, "appointment is rendered in right place");
+    assert.deepEqual($appointment.eq(0).position(), { top: 0, left: 0 }, "appointment is rendered in right place");
+    assert.deepEqual($appointment.eq(1).position(), { top: 10, left: 10 }, "appointment is rendered in right place");
+    assert.deepEqual($appointment.eq(2).position(), { top: 20, left: 20 }, "appointment is rendered in right place");
     assert.deepEqual(this.instance.option("items"), [item], "items are not affected");
 });
 
