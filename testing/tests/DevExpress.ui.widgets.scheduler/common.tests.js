@@ -3,7 +3,6 @@ var pointerMock = require("../../helpers/pointerMock.js");
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     isRenderer = require("core/utils/type").isRenderer,
-    translator = require("animation/translator"),
     devices = require("core/devices"),
     domUtils = require("core/utils/dom"),
     errors = require("ui/widget/ui.errors"),
@@ -2357,7 +2356,7 @@ QUnit.testStart(function() {
         });
 
         var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").eq(0)),
-            initialPosition = translator.locate($appointment);
+            initialPosition = $appointment.position();
 
 
         $(this.instance.$element().find(".dx-scheduler-date-table-cell").eq(5)).trigger(dragEvents.enter);
@@ -2369,7 +2368,7 @@ QUnit.testStart(function() {
             .up();
 
         $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").eq(0));
-        assert.deepEqual(translator.locate($appointment), initialPosition, "Appointments position is OK");
+        assert.deepEqual($appointment.position(), initialPosition, "Appointments position is OK");
     });
 
     QUnit.test("Appointment should have initial size if 'cancel' flag is defined as true during update operation (day view)", function(assert) {
@@ -2468,13 +2467,13 @@ QUnit.testStart(function() {
         });
 
         var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").eq(0)),
-            initialLeftPosition = translator.locate($appointment).left,
+            initialLeftPosition = $appointment.position().left,
             cellWidth = this.instance.$element().find(".dx-scheduler-all-day-table-cell").eq(0).outerWidth(),
             pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-left").eq(0)).start();
 
         pointer.dragStart().drag(-cellWidth * 2, 0).dragEnd();
 
-        assert.equal(translator.locate(this.instance.$element().find(".dx-scheduler-appointment").eq(0)).left, initialLeftPosition, "Left position is OK");
+        assert.equal(this.instance.$element().find(".dx-scheduler-appointment").eq(0).position().left, initialLeftPosition, "Left position is OK");
     });
 
     QUnit.test("Appointment should have initial top coordinate if 'cancel' flag is defined as true during resize operation", function(assert) {
@@ -2489,13 +2488,13 @@ QUnit.testStart(function() {
         });
 
         var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").eq(0)),
-            initialTopPosition = translator.locate($appointment).top,
+            initialTopPosition = $appointment.position().top,
             cellHeight = this.instance.$element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight(),
             pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-top").eq(0)).start();
 
         pointer.dragStart().drag(0, -cellHeight * 2).dragEnd();
 
-        assert.equal(translator.locate(this.instance.$element().find(".dx-scheduler-appointment").eq(0)).top, initialTopPosition, "Top position is OK");
+        assert.equal(this.instance.$element().find(".dx-scheduler-appointment").eq(0).position().top, initialTopPosition, "Top position is OK");
     });
 
     QUnit.test("onAppointmentUpdated", function(assert) {
@@ -3335,7 +3334,7 @@ QUnit.testStart(function() {
                     $header = element.getHeader().$element(),
                     $workSpace = element.getWorkSpace().$element(),
                     $appointment = $element.find(".dx-scheduler-appointment"),
-                    appointmentPosition = translator.locate($appointment);
+                    appointmentPosition = $appointment.position();
 
                 assert.equal($header.length, 1, "Header is rendered");
                 assert.equal($workSpace.length, 1, "Work Space is rendered");
@@ -3360,7 +3359,7 @@ QUnit.testStart(function() {
         this.instance.option("onContentReady", function(e) {
             var $element = $(e.component.$element()),
                 $appointment = $element.find(".dx-scheduler-appointment"),
-                appointmentPosition = translator.locate($appointment);
+                appointmentPosition = $appointment.position();
 
             assert.equal($appointment.length, 1, "Appointment is rendered");
             assert.roughEqual(appointmentPosition.top, 100, 2.001, "Appointment top is OK");
@@ -3391,7 +3390,7 @@ QUnit.testStart(function() {
         this.instance.option("onContentReady", function(e) {
             var $element = $(e.component.$element()),
                 $appointment = $element.find(".dx-scheduler-appointment"),
-                appointmentPosition = translator.locate($appointment);
+                appointmentPosition = $appointment.position();
 
             assert.equal($appointment.length, 1, "Appointment is rendered");
             assert.roughEqual(appointmentPosition.top, 150, 2.001, "Appointment top is OK");
