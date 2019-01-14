@@ -1,6 +1,5 @@
 var $ = require("../../core/renderer"),
     Callbacks = require("../../core/utils/callbacks"),
-    translator = require("../../animation/translator"),
     errors = require("../widget/ui.errors"),
     windowUtils = require("../../core/utils/window"),
     dialog = require("../dialog"),
@@ -2557,7 +2556,7 @@ var Scheduler = Widget.inherit({
             if(typeUtils.isFunction(apptDataCalculator)) {
                 updatedStartDate = apptDataCalculator($appointment, startDate).startDate;
             } else {
-                var coordinates = translator.locate($appointment);
+                var coordinates = $appointment.position();
                 updatedStartDate = new Date(this._workSpace.getCellDataByCoordinates(coordinates, isAllDay).startDate);
 
                 if($appointment.hasClass("dx-scheduler-appointment-reduced")) {
