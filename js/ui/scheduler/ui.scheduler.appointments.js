@@ -583,7 +583,11 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 }
 
                 this._initialSize = { width: e.width, height: e.height };
-                this._initialCoordinates = translator.locate(this._$currentAppointment);
+                this._initialCoordinates = {
+                    top: this._$currentAppointment.get(0).style.top,
+                    left: this._$currentAppointment.get(0).style.left
+                };
+                this._realInitialCoordinates = this._$currentAppointment.position();
             }).bind(this),
             onResizeEnd: (function(e) {
                 if(this._escPressed) {
@@ -774,7 +778,11 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 that._$currentAppointment = $(args.element);
                 that._initialSize = { width: args.width, height: args.height };
 
-                that._initialCoordinates = translator.locate(that._$currentAppointment);
+                that._initialCoordinates = {
+                    top: that._$currentAppointment.get(0).style.top,
+                    left: that._$currentAppointment.get(0).style.left
+                };
+                that._realInitialCoordinates = that._$currentAppointment.position();
             },
             onDrag: function(args) {
                 correctCoordinates(args.element);
@@ -818,12 +826,14 @@ var SchedulerAppointments = CollectionWidget.inherit({
     _dragEndHandler: function(e) {
         var $element = $(e.element),
             itemData = this._getItemData($element),
-            coordinates = this._initialCoordinates;
+            coordinates = this._initialCoordinates,
+            realCoordinates = this._realInitialCoordinates;
 
         this.notifyObserver("updateAppointmentAfterDrag", {
             data: itemData,
             $appointment: $element,
-            coordinates: coordinates
+            coordinates: coordinates,
+            realCoordinates: realCoordinates
         });
     },
 
@@ -1026,7 +1036,13 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
         if($appointment) {
             if(coords) {
-                translator.move($appointment, coords);
+                translator.move($appointment, {
+                    top: 0,
+                    left: 0
+                });
+                debugger;
+                $appointment.css("left", coords.left);
+                $appointment.css("top", coords.top);
                 delete this._initialSize;
             }
             if(size) {

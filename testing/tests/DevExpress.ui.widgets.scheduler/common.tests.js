@@ -2368,7 +2368,8 @@ QUnit.testStart(function() {
             .up();
 
         $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").eq(0));
-        assert.deepEqual($appointment.position(), initialPosition, "Appointments position is OK");
+        assert.roughEqual($appointment.position().top, initialPosition.top, 0.5, "Appointments position is OK");
+        assert.roughEqual($appointment.position().left, initialPosition.left, 0.5, "Appointments position is OK");
     });
 
     QUnit.test("Appointment should have initial size if 'cancel' flag is defined as true during update operation (day view)", function(assert) {

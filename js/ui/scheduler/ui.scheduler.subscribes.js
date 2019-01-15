@@ -142,14 +142,14 @@ var subscribes = {
         var target = options.data,
             updatedData = this._getUpdatedData(options),
             newCellIndex = this._workSpace.getDroppableCellIndex(),
-            oldCellIndex = this._workSpace.getCellIndexByCoordinates(options.coordinates),
+            oldCellIndex = this._workSpace.getCellIndexByCoordinates(options.realCoordinates),
             becomeAllDay = this.fire("getField", "allDay", updatedData),
             wasAllDay = this.fire("getField", "allDay", target);
 
         var appointment = extend({}, target, updatedData);
 
         var movedToAllDay = this._workSpace.supportAllDayRow() && becomeAllDay,
-            cellData = this._workSpace.getCellDataByCoordinates(options.coordinates, movedToAllDay),
+            cellData = this._workSpace.getCellDataByCoordinates(options.realCoordinates, movedToAllDay),
             movedBetweenAllDayAndSimple = this._workSpace.supportAllDayRow() && (wasAllDay && !becomeAllDay || !wasAllDay && becomeAllDay);
 
         if((newCellIndex !== oldCellIndex) || movedBetweenAllDayAndSimple) {
