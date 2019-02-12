@@ -822,12 +822,14 @@ var TagBox = SelectBox.inherit({
         if(selectedItemsAlreadyLoaded) {
             return d.resolve(filteredItems).promise();
         } else {
-            var dataSourceFilter = this._dataSource.filter(),
-                filterExpr = creator.getCombinedFilter(this.option("valueExpr"), dataSourceFilter),
-                filterLength = encodeURI(JSON.stringify(filterExpr)).length,
-                resultFilter = filterLength > this.option("maxFilterLength") ? undefined : filterExpr;
+            var dataSourceFilter = this._dataSource.filter();
+            var filterExpr = creator.getCombinedFilter(this.option("valueExpr"), dataSourceFilter);
+            var filterLength = encodeURI(JSON.stringify(filterExpr)).length;
+            var filter = filterLength > this.option("maxFilterLength") ? undefined : filterExpr;
+            var loadOptions = this._dataSource.loadOptions();
+            var customQueryParams = loadOptions.customQueryParams;
 
-            this._dataSource.store().load({ filter: resultFilter }).done(function(items) {
+            this._dataSource.store().load({ filter, customQueryParams }).done(function(items) {
                 d.resolve(items.filter(clientFilterFunction));
             });
 
@@ -836,18 +838,26 @@ var TagBox = SelectBox.inherit({
     },
 
     _createTagsData: function(values, filteredItems) {
-        var items = [],
-            cache = {};
+        var items = [];
+        var cache = {};
+        var isValueExprSpecified = this._valueGetterExpr() === "this";
+        var filteredValues = {};
 
-        each(values, function(valueIndex, value) {
-            var item = filteredItems[valueIndex];
+        filteredItems.forEach(function(filteredItem) {
+            var filteredItemValue = isValueExprSpecified ? JSON.stringify(filteredItem) : this._valueGetter(filteredItem);
 
-            if(this._valueGetterExpr() === "this" && !isDefined(item)) {
+            filteredValues[filteredItemValue] = filteredItem;
+        }.bind(this));
+
+        values.forEach(function(value, index) {
+            var currentItem = filteredValues[isValueExprSpecified ? JSON.stringify(value) : value];
+
+            if(isValueExprSpecified && !isDefined(currentItem)) {
                 this._loadItem(value, cache).always((function(item) {
-                    this._createTagData(items, item, value, valueIndex);
+                    this._createTagData(items, item, value, index);
                 }).bind(this));
             } else {
-                this._createTagData(items, item, value, valueIndex);
+                this._createTagData(items, currentItem, value, index);
             }
         }.bind(this));
 
@@ -866,7 +876,7 @@ var TagBox = SelectBox.inherit({
         }
     },
 
-    _loadTagData: function() {
+    _loadTagsData: function() {
         var values = this._getValue(),
             tagData = new Deferred();
 
@@ -885,7 +895,7 @@ var TagBox = SelectBox.inherit({
     _renderTags: function() {
         var d = new Deferred();
 
-        this._loadTagData().always((function(items) {
+        this._loadTagsData().always((function(items) {
             this._renderTagsCore(items);
             this._renderEmptyState();
 

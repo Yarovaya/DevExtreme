@@ -106,7 +106,7 @@ var BaseRenderingStrategy = Class.inherit({
             allDay = this.isAllDay(item),
             result = [],
             startDate = new Date(this.instance.fire("getField", "startDate", item)),
-            isRecurring = !!item.recurrenceRule;
+            isRecurring = !!this.instance.fire("getField", "recurrenceRule", item);
 
         for(var j = 0; j < position.length; j++) {
             var height = this.calculateAppointmentHeight(item, position[j]),
@@ -250,7 +250,7 @@ var BaseRenderingStrategy = Class.inherit({
                     j: j,
                     top: item.top,
                     left: item.left,
-                    cellPosition: item.cellPosition,
+                    cellShift: item.cellShift,
                     isStart: true,
                     allDay: item.allDay,
                     __tmpIndex: __tmpIndex
@@ -263,7 +263,7 @@ var BaseRenderingStrategy = Class.inherit({
                     j: j,
                     top: item.top + item.height,
                     left: item.left + item.width,
-                    cellPosition: item.cellPosition,
+                    cellShift: item.cellShift,
                     isStart: false,
                     allDay: item.allDay,
                     __tmpIndex: __tmpIndex
