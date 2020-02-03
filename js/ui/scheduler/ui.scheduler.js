@@ -2127,6 +2127,12 @@ const Scheduler = Widget.inherit({
 
             if(typeUtils.isFunction(apptDataCalculator)) {
                 updatedStartDate = apptDataCalculator($appointment, startDate).startDate;
+
+                updatedStartDate = this.fire(
+                    'convertDateByTimezone',
+                    updatedStartDate,
+                    this.fire('getField', 'startDateTimeZone', appointmentData)
+                );
             } else {
                 if(options.isAppointmentResized) {
                     const coordinates = translator.locate($appointment);
