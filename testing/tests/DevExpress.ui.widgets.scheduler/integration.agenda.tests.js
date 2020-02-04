@@ -1471,3 +1471,24 @@ QUnit.test('Appointments should be rendered correctly if agenda view is set as o
     assert.equal($appointments.first().position().top, 0, 'appointment position is OK');
     assert.equal($appointments.last().position().top, 240, 'appointment position is OK');
 });
+
+QUnit.test('Recurring appointment content end tooltip should be correct when custom timezone is set', function(assert) {
+    const scheduler = createInstance({
+        dataSource: [{
+            text: 'Daily meeting',
+            startDate: new Date(2019, 2, 9, 11),
+            endDate: new Date(2019, 2, 9, 21),
+            recurrenceRule: 'FREQ=DAILY'
+        }],
+        views: ['agenda'],
+        currentView: 'agenda',
+        currentDate: new Date(2019, 2, 8),
+        height: 600,
+        timeZone: 'Europe/Paris'
+    });
+
+    assert.equal(scheduler.appointments.getDateText(1), '9:00 AM - 7:00 PM', 'Dates in appointment are correct');
+
+    scheduler.appointments.click(1);
+    assert.equal(scheduler.tooltip.getDateText(), '9:00 AM - 7:00 PM', 'Dates in tooltip are correct');
+});
