@@ -442,7 +442,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         const deltaTz = getDeltaTz(5, startDate);
         const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'week', timeZone: 'Asia/Ashkhabad' });
 
-        scheduler.instance.showAppointmentTooltip(appointment, '.dx-scheduler-appointment');
+        scheduler.appointments.click();
 
         const expectedStartDate = dateLocalization.format(new Date(startDate.getTime() + deltaTz), 'shorttime');
         const expectedEndDate = dateLocalization.format(new Date(endDate.getTime() + deltaTz), 'shorttime');
@@ -464,11 +464,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             dataSource: [appointment],
             currentView: 'week'
         });
+        const expectedDate = scheduler.appointments.getDateText(0);
 
-        const $appointment = scheduler.appointments.getAppointment();
-        scheduler.instance.showAppointmentTooltip(appointment, $appointment);
-
-        const expectedDate = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
+        scheduler.appointments.click(0);
 
         assert.equal(scheduler.tooltip.getDateText(), expectedDate, 'dates and time were displayed correctly');
     });
@@ -489,10 +487,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             timeZone: 'Asia/Qyzylorda'
         });
 
-        const $appointment = scheduler.appointments.getAppointment();
-        scheduler.instance.showAppointmentTooltip(appointment, $appointment);
+        const expectedDate = scheduler.appointments.getDateText(0);
 
-        const expectedDate = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
+        scheduler.appointments.click(0);
 
         assert.equal(scheduler.tooltip.getDateText(), expectedDate, 'dates and time were displayed correctly');
     });
