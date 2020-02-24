@@ -2083,7 +2083,9 @@ const Scheduler = Widget.inherit({
         const endDate = new Date(this.fire('getField', 'endDate', resultAppointmentData));
         const appointmentDuration = endDate.getTime() - startDate.getTime();
         let updatedStartDate = startDate;
+        let updatedEndDate = endDate;
         let appointmentStartDate;
+        let appointmentEndDate;
 
         if(typeUtils.isDefined($appointment)) {
         // if(typeUtils.isDefined($appointment) && (this._isAppointmentRecurrence(appointmentData) || this._needUpdateAppointmentData($appointment))) {
@@ -2098,6 +2100,7 @@ const Scheduler = Widget.inherit({
                 } else {
                     const settings = $appointment.data('dxAppointmentSettings');
                     appointmentStartDate = settings && settings.startDate;
+                    appointmentEndDate = settings && settings.endDate;
 
                     if($appointment.hasClass(REDUCED_APPOINTMENT_CLASS) || (settings && settings.appointmentReduced)) {
                         appointmentStartDate = settings.originalAppointmentStartDate;
@@ -2105,6 +2108,12 @@ const Scheduler = Widget.inherit({
 
                     if(appointmentStartDate) {
                         updatedStartDate = appointmentStartDate;
+                    }
+
+                    if(appointmentEndDate) {
+                        updatedEndDate = appointmentEndDate;
+                    } else {
+                        updatedEndDate = new Date(updatedStartDate.getTime() + appointmentDuration);
                     }
                 }
 
@@ -2114,11 +2123,17 @@ const Scheduler = Widget.inherit({
                         updatedStartDate,
                         this.fire('getField', 'startDateTimeZone', appointmentData)
                     );
+
+                    this.fire(
+                        'convertDateByTimezoneBack',
+                        updatedEndDate,
+                        this.fire('getField', 'startDateTimeZone', appointmentData) // NOTE: endDateTimeZone ?
+                    );
                 }
             }
 
             this.fire('setField', 'startDate', resultAppointmentData, updatedStartDate);
-            this.fire('setField', 'endDate', resultAppointmentData, new Date(updatedStartDate.getTime() + appointmentDuration));
+            this.fire('setField', 'endDate', resultAppointmentData, updatedEndDate);
         }
 
         return resultAppointmentData;
