@@ -34,7 +34,6 @@ const utils = require('../utils');
 const COMPONENT_CLASS = 'dx-scheduler-work-space';
 const GROUPED_WORKSPACE_CLASS = 'dx-scheduler-work-space-grouped';
 const VERTICAL_GROUPED_WORKSPACE_CLASS = 'dx-scheduler-work-space-vertical-grouped';
-const HORIZONTAL_GROUPED_WORKSPACE_CLASS = 'dx-scheduler-work-space-horizontal-grouped';
 const WORKSPACE_VERTICAL_GROUP_TABLE_CLASS = 'dx-scheduler-work-space-vertical-group-table';
 
 const WORKSPACE_WITH_BOTH_SCROLLS_CLASS = 'dx-scheduler-work-space-both-scrollbar';
@@ -580,11 +579,11 @@ const SchedulerWorkSpace = Widget.inherit({
     },
 
     _toggleGroupingDirectionClass: function() {
-        this.$element().removeClass(VERTICAL_GROUPED_WORKSPACE_CLASS);
-        this.$element().removeClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS);
+        // this.$element().removeClass(VERTICAL_GROUPED_WORKSPACE_CLASS);
+        // this.$element().removeClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS);
 
-        this._isVerticalGroupedWorkSpace() ? this.$element().addClass(VERTICAL_GROUPED_WORKSPACE_CLASS) : this.$element().addClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS);
-        // this.$element().toggleClass(VERTICAL_GROUPED_WORKSPACE_CLASS, this._isVerticalGroupedWorkSpace());
+        // this._isVerticalGroupedWorkSpace() ? this.$element().addClass(VERTICAL_GROUPED_WORKSPACE_CLASS) : this.$element().addClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS);
+        this.$element().toggleClass(VERTICAL_GROUPED_WORKSPACE_CLASS, this._isVerticalGroupedWorkSpace());
     },
 
     _getRealGroupOrientation: function() {
