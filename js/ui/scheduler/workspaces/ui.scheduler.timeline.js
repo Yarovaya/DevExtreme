@@ -10,8 +10,6 @@ const HorizontalShader = require('../shaders/ui.scheduler.current_time_shader.ho
 const TIMELINE_CLASS = 'dx-scheduler-timeline';
 const GROUP_TABLE_CLASS = 'dx-scheduler-group-table';
 
-const HORIZONTAL_GROUPED_WORKSPACE_CLASS = 'dx-scheduler-work-space-horizontal-grouped';
-
 const HEADER_PANEL_CELL_CLASS = 'dx-scheduler-header-panel-cell';
 const HEADER_PANEL_WEEK_CELL_CLASS = 'dx-scheduler-header-panel-week-cell';
 const HEADER_ROW_CLASS = 'dx-scheduler-header-row';
@@ -40,9 +38,9 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
         return 'vertical';
     },
 
-    _toggleGroupingDirectionClass: function() {
-        this.$element().toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace());
-    },
+    // _toggleGroupingDirectionClass: function() {
+    //     this.$element().toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace());
+    // },
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
