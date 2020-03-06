@@ -14,6 +14,7 @@
 
 @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT: 50px;
 @SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT * 1.5;
+@SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT_VERTICAL_GROUPED: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
 @SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT * 0.5;
 @SCHEDULER_VERTICAL_GROUPED_ALL_DAY_TABLE_CELL_HEIGHT: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
 @SCHEDULER_VERTICAL_GROUP_HEADER_CONTENT_TOP_OFFSET: 16px;
@@ -2377,8 +2378,8 @@
             .dx-scheduler-all-day-title {
                 top: 0;
                 position: relative;
-                height: 50px !important; // stylelint-disable-line declaration-no-important
-                line-height: 50px !important; // stylelint-disable-line declaration-no-important
+                height: @SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT_VERTICAL_GROUPED;
+                line-height: @SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT_VERTICAL_GROUPED;
                 border-bottom: none;
                 border-right: none;
             }
@@ -2397,7 +2398,7 @@
         }
 
         .dx-scheduler-all-day-table-row {
-            height: 50px;
+            height: @SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT_VERTICAL_GROUPED;
         }
 
         .dx-scheduler-time-panel-cell {
