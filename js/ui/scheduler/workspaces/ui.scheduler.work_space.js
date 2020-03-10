@@ -2368,8 +2368,11 @@ const SchedulerWorkSpace = Widget.inherit({
 
     getEndViewDate: function() {
         const dateOfLastViewCell = this.getDateOfLastViewCell();
-        const endDateOfLastViewCell = this.calculateEndViewDate(dateOfLastViewCell);
+        let endDateOfLastViewCell = this.calculateEndViewDate(dateOfLastViewCell);
 
+        if(!dateUtils.sameDate(dateOfLastViewCell, endDateOfLastViewCell)) {
+            endDateOfLastViewCell = dateUtils.trimTime(endDateOfLastViewCell);
+        }
         return this._adjustEndViewDateByDaylightDiff(dateOfLastViewCell, endDateOfLastViewCell);
     },
 
