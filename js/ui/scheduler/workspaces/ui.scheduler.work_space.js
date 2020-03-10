@@ -441,11 +441,10 @@ const SchedulerWorkSpace = Widget.inherit({
                 this.repaint();
                 break;
             case 'groupOrientation':
-                this._initGroupedStrategy();
+                this._initGrouping();
                 this._createAllDayPanelElements();
                 this._removeAllDayElements();
                 this._cleanWorkSpace();
-                this._toggleGroupByDateClass();
                 break;
             case 'showAllDayPanel':
                 if(this._isVerticalGroupedWorkSpace()) {
@@ -584,7 +583,6 @@ const SchedulerWorkSpace = Widget.inherit({
         this.$element().removeClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS);
 
         this._isVerticalGroupedWorkSpace() ? this.$element().addClass(VERTICAL_GROUPED_WORKSPACE_CLASS) : this.$element().addClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS);
-        // this.$element().toggleClass(VERTICAL_GROUPED_WORKSPACE_CLASS, this._isVerticalGroupedWorkSpace());
     },
 
     _getRealGroupOrientation: function() {

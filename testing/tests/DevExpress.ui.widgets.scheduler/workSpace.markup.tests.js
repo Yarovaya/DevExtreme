@@ -586,6 +586,10 @@ QUnit.module('Workspace Day markup with vertical grouping', dayWithGroupingModul
         const $element = this.instance.$element();
 
         assert.ok($element.hasClass('dx-scheduler-work-space-vertical-grouped'), 'Workspace has \'dx-scheduler-work-space-vertical-grouped\' css class');
+
+        this.instance.option('groupOrientation', 'horizontal');
+
+        assert.ok($element.hasClass('dx-scheduler-work-space-horizontal-grouped'), 'Workspace has \'dx-scheduler-work-space-horizontal-grouped\' css class');
     });
 
     QUnit.test('Scheduler workspace day should have right groupedStrategy, groupOrientation = vertical', function(assert) {

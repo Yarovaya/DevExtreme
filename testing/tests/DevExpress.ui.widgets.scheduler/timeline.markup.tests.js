@@ -418,6 +418,9 @@ QUnit.module('TimelineDay with horizontal grouping markup', timelineDayModuleCon
     QUnit.test('Scheduler timeline day should have a right css class, groupOrientation = horizontal', function(assert) {
         const $element = this.instance.$element();
         assert.ok($element.hasClass('dx-scheduler-work-space-horizontal-grouped'), 'dxSchedulerTimelineDay has \'dx-scheduler-work-space-horizontal-grouped\' css class');
+
+        this.instance.option('groupOrientation', 'vertical');
+        assert.ok($element.hasClass('dx-scheduler-work-space-vertical-grouped'), 'dxSchedulerTimelineDay has \'dx-scheduler-work-space-vertical-grouped\' css class');
     });
 
     QUnit.test('Scheduler timeline day view should have right cell & row count, groupOrientation = horizontal', function(assert) {

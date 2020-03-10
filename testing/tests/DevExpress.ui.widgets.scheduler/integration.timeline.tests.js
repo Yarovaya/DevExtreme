@@ -426,3 +426,52 @@ QUnit.test('Appointment has correct render with timelineWeek view & endHour outs
     const appointment = scheduler.appointments.getAppointment();
     assert.roughEqual(appointment.outerWidth(), 175, 1, 'Appointment width is OK');
 });
+
+QUnit.test('Workspace view group header cells have same height as table cells (T837711)', function(assert) {
+    const priorityData = [
+        {
+            text: 'Low Priority',
+            id: 1
+        }, {
+            text: 'High Priority',
+            id: 2
+        }, {
+            text: 'High Priority',
+            id: 3,
+        }, {
+            text: 'HigHigh PriorityHigh PriorityHigh Priorityh Priority',
+            id: 4,
+        }, {
+            text: 'High PriorityHigh PriorityHigh PriorityHigh PriorityHigh Priority Priority',
+            id: 5
+        }, {
+            text: 'High PriorityHighPriorityHighPriorityHighPriorityHighPriorityHigh Priority',
+            id: 6
+        }
+    ];
+
+    const scheduler = createInstance({
+        dataSource: [],
+        views: ['timelineMonth'],
+        currentView: 'timelineMonth',
+        currentDate: new Date(2018, 4, 21),
+        crossScrollingEnabled: true,
+        groups: ['priority'],
+        resources: [{
+            fieldExpr: 'priority',
+            allowMultiple: false,
+            dataSource: priorityData,
+            label: 'Priority'
+        }],
+        height: 700
+    });
+
+    const headerCells = scheduler.workSpace.groups.getGroupHeaders();
+
+    const firstHeaderCell = headerCells.eq(0);
+    const fifthHeaderCell = headerCells.eq(4);
+    const dateTableCell = scheduler.workSpace.getCells().eq(0);
+
+    assert.equal(firstHeaderCell.innerHeight(), fifthHeaderCell.innerHeight(), 'Header cells have same height');
+    assert.equal(fifthHeaderCell.innerHeight(), dateTableCell.innerHeight(), 'Header cell and table cell have same height');
+});
