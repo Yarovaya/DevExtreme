@@ -209,7 +209,7 @@ QUnit.testStart(function() {
                     delete this.instance;
                 }
 
-                this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay(options).dxSchedulerWorkSpaceDay('instance');
+                this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay($.extend(options, { showCurrentTimeIndicator: false })).dxSchedulerWorkSpaceDay('instance');
                 this.instance.initDragBehavior();
                 stubInvokeMethod(this.instance, options);
             };
@@ -431,6 +431,16 @@ QUnit.testStart(function() {
 
         assert.deepEqual(secondCellData.startDate, new Date(2018, 2, 16, 12), 'cell has right startDate');
         assert.deepEqual(secondCellData.endDate, new Date(2018, 2, 16, 12, 30), 'cell has right endDate');
+    });
+
+    QUnit.test('Get last view date when cellDuration(hoursInterval) is set (T854826)', function(assert) {
+        this.instance.option({
+            currentDate: new Date(2020, 5, 30),
+            firstDayOfWeek: 1,
+            hoursInterval: 2.25
+        });
+
+        assert.deepEqual(this.instance.getEndViewDate(), new Date(2020, 6, 1, 0, 0), 'Last view date is OK');
     });
 })('Work Space Day');
 
