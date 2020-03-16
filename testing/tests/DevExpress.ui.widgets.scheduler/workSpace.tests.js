@@ -440,7 +440,18 @@ QUnit.testStart(function() {
             hoursInterval: 2.25
         });
 
-        assert.deepEqual(this.instance.getEndViewDate(), new Date(2020, 6, 1, 0, 0), 'Last view date is OK');
+        assert.deepEqual(this.instance.getEndViewDate(), new Date(2020, 5, 30, 23, 59), 'Last view date is OK');
+    });
+
+    QUnit.test('Get last view date when cellDuration(hoursInterval) and endDayHour is set (T854826)', function(assert) {
+        this.instance.option({
+            currentDate: new Date(2020, 5, 30),
+            endDayHour: 16,
+            firstDayOfWeek: 1,
+            hoursInterval: 2.25
+        });
+
+        assert.deepEqual(this.instance.getEndViewDate(), new Date(2020, 5, 30, 15, 59), 'Last view date is OK');
     });
 })('Work Space Day');
 

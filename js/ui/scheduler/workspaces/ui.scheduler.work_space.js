@@ -2372,7 +2372,9 @@ const SchedulerWorkSpace = Widget.inherit({
 
         let adjustedEndViewDate = this._adjustEndViewDateByDaylightDiff(dateOfLastViewCell, endDateOfLastViewCell);
 
-        // adjustedEndViewDate.setHours(this.option('endDayHour'), 0, 0);
+        if(this.option('endDayHour') !== 24) {
+            adjustedEndViewDate.setHours(this.option('endDayHour'), 0, 0);
+        }
 
         if(!dateUtils.sameDate(dateOfLastViewCell, adjustedEndViewDate)) {
             adjustedEndViewDate = dateUtils.trimTime(adjustedEndViewDate);
@@ -2380,7 +2382,7 @@ const SchedulerWorkSpace = Widget.inherit({
 
         // adjustedEndViewDate = this._adjustEndViewDateByDaylightDiff(dateOfLastViewCell, endDateOfLastViewCell);
 
-        return adjustedEndViewDate;
+        return new Date(adjustedEndViewDate.getTime() - 1);
     },
 
     calculateEndViewDate: function(dateOfLastViewCell) {
@@ -2391,8 +2393,8 @@ const SchedulerWorkSpace = Widget.inherit({
         const daylightDiff = utils.getDaylightOffsetInMs(startDate, endDate);
 
         const endDateOfLastViewCell = new Date(endDate.getTime() - daylightDiff);
-        // return endDateOfLastViewCell;
-        return new Date(endDateOfLastViewCell.getTime() - toMs('minute'));
+        return endDateOfLastViewCell;
+        // return new Date(endDateOfLastViewCell.getTime() - toMs('minute'));
     },
 
     getDateOfLastViewCell: function() {
