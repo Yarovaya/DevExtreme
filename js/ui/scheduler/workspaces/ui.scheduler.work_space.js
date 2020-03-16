@@ -2372,6 +2372,8 @@ const SchedulerWorkSpace = Widget.inherit({
 
         let adjustedEndViewDate = this._adjustEndViewDateByDaylightDiff(dateOfLastViewCell, endDateOfLastViewCell);
 
+        adjustedEndViewDate = new Date(new Date(adjustedEndViewDate).setHours(this.option('endDayHour'), 0, 0));
+
         if(!dateUtils.sameDate(dateOfLastViewCell, adjustedEndViewDate)) {
             adjustedEndViewDate = dateUtils.trimTime(adjustedEndViewDate);
         }
