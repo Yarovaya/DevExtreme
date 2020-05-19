@@ -244,7 +244,7 @@ function getDatesByRecurrence(options) {
     // const iterationResult = {};
     const rule = recurrenceRule.rule;
     const recurrenceStartDate = options.start;
-    // const maxDate = correctMaxDate(options.max, rule);
+    const maxDate = correctMaxDate(options.max, rule);
 
     if(!recurrenceRule.isValid || !rule.freq) {
         return result;
@@ -320,7 +320,7 @@ function getDatesByRecurrence(options) {
     //     return a - b;
     // });
 
-    return rRuleSet.between(options.min, options.max);
+    return rRuleSet.between(options.min, maxDate, true);
 }
 
 // function pushToResult(iteration, iterationResult, currentDate, i, config, verifiedField) {
@@ -363,18 +363,18 @@ function getDatesByRecurrence(options) {
 //     return resultArray;
 // }
 
-// function correctMaxDate(maxDate, rule) {
-//     const newMaxDate = new Date(maxDate);
-//     switch(rule.freq) {
-//         case 'MONTHLY':
-//             newMaxDate.setMonth(newMaxDate.getMonth() + 1);
-//             break;
-//         case 'YEARLY':
-//             newMaxDate.setYear(newMaxDate.getYear() + 1);
-//             break;
-//     }
-//     return newMaxDate > maxDate ? newMaxDate : maxDate;
-// }
+function correctMaxDate(maxDate, rule) {
+    const newMaxDate = new Date(maxDate);
+    switch(rule.freq) {
+        case 'MONTHLY':
+            newMaxDate.setMonth(newMaxDate.getMonth() + 1);
+            break;
+        case 'YEARLY':
+            newMaxDate.setYear(newMaxDate.getYear() + 1);
+            break;
+    }
+    return newMaxDate > maxDate ? newMaxDate : maxDate;
+}
 
 // function correctDate(originalDate, date) {
 //     if(originalDate.getDate() !== date) {
