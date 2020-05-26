@@ -6,7 +6,7 @@ import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
 import errors from '../widget/ui.errors';
 import translator from '../../animation/translator';
-import { grep } from '../../core/utils/common';
+import { grep, equalByValue } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
 import SchedulerTimezones from './timezones/ui.scheduler.timezones';
@@ -14,7 +14,6 @@ import { Deferred } from '../../core/utils/deferred';
 import dateLocalization from '../../localization/date';
 import timeZoneUtils from './utils.timeZone';
 import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './constants';
-
 const MINUTES_IN_HOUR = 60;
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -174,7 +173,7 @@ const subscribes = {
         const cellData = this._workSpace.getCellDataByCoordinates(options.coordinates, movedToAllDay);
         const movedBetweenAllDayAndSimple = this._workSpace.supportAllDayRow() && (wasAllDay && !becomeAllDay || !wasAllDay && becomeAllDay);
 
-        if((newCellIndex !== oldCellIndex) || movedBetweenAllDayAndSimple) {
+        if((newCellIndex !== oldCellIndex) || movedBetweenAllDayAndSimple || !equalByValue(target, updatedData)) {
             this._checkRecurringAppointment(target, appointment, cellData.startDate, (function() {
 
                 this._convertDatesByTimezoneBack(true, updatedData, appointment);
