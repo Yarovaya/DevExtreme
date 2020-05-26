@@ -1509,6 +1509,32 @@ QUnit.test('Appointment should push correct data to the onAppointmentUpdating ev
     this.clock.tick();
 });
 
+QUnit.test('Appointment should be updated if it is dropped to the initial cell, if data was changed', function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 1, 9),
+        currentView: 'week',
+        firstDayOfWeek: 0,
+        dataSource: [{
+            text: 'a',
+            startDate: new Date(2015, 1, 9, 1, 15),
+            endDate: new Date(2015, 1, 9, 5)
+        }]
+    });
+
+    const $appointment = this.scheduler.appointments.getAppointment(0);
+    const appointmentCell = this.scheduler.workSpace.getCell(15);
+
+    const pointer = pointerMock($appointment).start().down().move(1, 0);
+    appointmentCell.trigger(dragEvents.enter);
+    pointer.up();
+
+    this.clock.tick();
+    const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
+
+    assert.deepEqual(appointmentData.startDate, new Date(2015, 1, 9, 1, 0), 'Start date is correct');
+    assert.deepEqual(appointmentData.endDate, new Date(2015, 1, 9, 4, 45), 'End date is correct');
+});
+
 QUnit.test('Appointment should not be updated if it is dropped to the initial cell (week view)', function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 1, 9),
