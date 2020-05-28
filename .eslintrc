@@ -519,7 +519,9 @@
                     "xmlns",
                     "exdate",
                     "dtstart",
-                    "rrule"
+                    "rrule",
+                    "wkst",
+                    "byweekday"
                 ]
             }
         ]
