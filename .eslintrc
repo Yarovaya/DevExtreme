@@ -13,9 +13,6 @@
             "jsx": true
         }
     },
-    "plugins": [
-        "spellcheck"
-    ],
     "globals": {
         "setInterval": true,
         "setTimeout": true,
