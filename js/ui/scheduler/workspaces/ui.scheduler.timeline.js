@@ -262,9 +262,8 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
 
     _setHorizontalGroupHeaderCellsHeight: noop,
 
-    getIndicationWidth: function() {
+    getIndicationCellCount: function() {
         const today = this._getToday();
-        const cellWidth = this.getCellWidth();
         const date = this._getIndicationFirstViewDate();
         const hiddenInterval = this._getHiddenInterval();
         const timeDiff = today.getTime() - date.getTime();
@@ -273,7 +272,20 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
         const duration = timeDiff - differenceInDays * hiddenInterval;
         const cellCount = duration / this.getCellDuration();
 
-        return cellCount * cellWidth;
+        return cellCount;
+    },
+
+    getIndicationWidth: function() {
+        if(this.option('groupByDate')) {
+            const cellCount = this.getIndicationCellCount();
+            const integerPart = Math.trunc(cellCount);
+            const fractionPart = cellCount - integerPart;
+
+            return this.getCellWidth() * (integerPart * this._getGroupCount() + fractionPart);
+        } else {
+            return this.getIndicationCellCount() * this.getCellWidth();
+        }
+
     },
 
     _renderIndicator: function(height, rtlOffset, $container, groupCount) {
@@ -286,7 +298,7 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
             $indicator.css('left', rtlOffset ? rtlOffset - width : width);
         } else {
             for(let i = 0; i < groupCount; i++) {
-                const offset = this._getCellCount() * this.getCellWidth() * i;
+                const offset = this.option('groupByDate') ? i * this.getCellWidth() : this._getCellCount() * this.getCellWidth() * i;
                 $indicator = this._createIndicator($container);
                 $indicator.height(getBoundingRect($container.get(0)).height);
 
