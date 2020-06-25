@@ -299,11 +299,6 @@ export default class AppointmentPopup {
         return result;
     }
 
-    _createFormDataAdapter() {
-        const formData = this._appointmentForm.option('formData');
-        return this.scheduler.createAppointmentAdapter(formData);
-    }
-
     saveChanges(showLoadPanel) {
         const deferred = new Deferred();
         const validation = this._appointmentForm.validate();
@@ -326,8 +321,9 @@ export default class AppointmentPopup {
             }
 
             // const formData = objectUtils.deepExtendArraySafe({}, this._appointmentForm.option('formData'), true);
-            const adapter = this._createFormDataAdapter();
-            const appointment = adapter.createModifiedAppointment('fromAppointment');
+            const formData = this._appointmentForm.option('formData');
+            const adapter = this.scheduler.createAppointmentAdapter(formData);
+            const appointment = adapter.clone({ pathTimeZone: 'fromAppointment' }).source; // TODO:
 
             const oldData = this.scheduler._editAppointmentData;
             const recData = this.scheduler._updatedRecAppointment;
